@@ -8,7 +8,7 @@
     <Title>TBC.CommonLib</Title>
     <Authors>Jaffoo</Authors>
     <Company>none</Company>
-    <Description>通用工具类，包含数据转换扩展，数据验证扩展，通用工具类</Description>
+    <Description>The Best Choice for common utilities(TBC)，包含数据转换扩展，数据验证扩展，通用工具类</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Jaffoo/TBC.CommonLib</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
