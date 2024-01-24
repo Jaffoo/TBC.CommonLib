@@ -74,5 +74,51 @@
                 age--;
             return age;
         }
+
+
+
+        /// <summary>
+        /// 时间戳字符串转时间
+        /// </summary>
+        /// <param name="timeStamp">时间戳</param>
+        /// <param name="num">时间戳位数</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static DateTime TimeStampToDate(string? timeStamp, int num = 13)
+        {
+            if (string.IsNullOrWhiteSpace(timeStamp))
+                throw new ArgumentException("时间戳不能为空");
+
+            if (!long.TryParse(timeStamp, out long unixTimeStamp))
+                throw new ArgumentException("时间戳格式不正确");
+
+            if (num == 10)
+                unixTimeStamp *= 1000; // 将 10 位时间戳转换为 13 位时间戳
+            else if (num != 13)
+                throw new ArgumentException("时间戳位数必须为 10 或 13");
+
+            DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            DateTime date = origin.AddMilliseconds(unixTimeStamp);
+            return date;
+        }
+
+        /// <summary>
+        /// 时间戳转时间
+        /// </summary>
+        /// <param name="timeStamp">时间戳</param>
+        /// <param name="num">时间戳位数</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static DateTime TimeStampToDate(long timeStamp, int num = 13)
+        {
+            if (num == 10)
+                timeStamp *= 1000; // 将 10 位时间戳转换为 13 位时间戳
+            else if (num != 13)
+                throw new ArgumentException("时间戳位数必须为 10 或 13");
+
+            DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            DateTime date = origin.AddMilliseconds(timeStamp);
+            return date;
+        }
     }
 }
