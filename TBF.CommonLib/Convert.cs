@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TBC.CommonLib.Convert
+namespace TBC.CommonLib
 {
     /// <summary>
     /// 数据转换类
@@ -145,11 +145,11 @@ namespace TBC.CommonLib.Convert
         /// </summary>
         /// <typeparam name="T">枚举</typeparam>
         /// <param name="str">字符串</param>
-        /// <param name="defaultVal">默认值</param>
         /// <returns></returns>
-        public static T ToEnum<T>(this string? str, T? defaultVal = null) where T : struct
+        public static T? ToEnum<T>(this string? str) where T : struct
         {
-            return Enum.TryParse(str, out T result) ? result : defaultVal ?? default;
+            if (!Enum.TryParse(str, out T result)) return null;
+            return result;
         }
 
         /// <summary>
@@ -166,18 +166,17 @@ namespace TBC.CommonLib.Convert
         }
         #endregion
 
-        #region int转其他
+        #region int/long转其他
         /// <summary>
         /// 转枚举
         /// </summary>
         /// <typeparam name="T">枚举</typeparam>
         /// <param name="value">枚举值</param>
-        /// <param name="defaultVal">默认值</param>
         /// <returns></returns>
-        public static T ToEnum<T>(this int value, T? defaultVal = null) where T : struct
+        public static T? ToEnum<T>(this int value) where T : struct
         {
             if (Enum.IsDefined(typeof(T), value)) return (T)(object)value;
-            else return defaultVal ?? default;
+            else return null;
         }
         #endregion
 
