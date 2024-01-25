@@ -16,13 +16,19 @@
         /// <exception cref="ArgumentException"></exception>
         public static string PhoneHide(string? phone, int num = 5, int start = 3, string charStr = "*")
         {
-            if (!phone.IsMobile()) throw new ArgumentException("电话号码格式错误");
-            if (start >= 11) start = 3;
-            if (num + start >= 11) num = 11 - start;
-            var numStr = phone!.Substring(start, num);
-            charStr = new string(charStr[0], num);
-            var result = phone.Replace(numStr, charStr);
-            return result;
+            try
+            {
+                if (start >= 11) start = 3;
+                if (num + start >= 11) num = 11 - start;
+                var numStr = phone!.Substring(start, num);
+                charStr = new string(charStr[0], num);
+                var result = phone.Replace(numStr, charStr);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("电话号码格式错误");
+            }
         }
 
         /// <summary>
@@ -33,15 +39,20 @@
         /// <exception cref="ArgumentException"></exception>
         public static DateTime BirthdayFromIDCard(string? idCard)
         {
-            if (!idCard.IsIDCard()) throw new ArgumentException("身份证号码格式错误");
+            try
+            {
+                string birthdayPart = idCard!.Substring(6, 8);
+                int year = birthdayPart.Substring(0, 4).ToInt();
+                int month = birthdayPart.Substring(4, 2).ToInt();
+                int day = birthdayPart.Substring(6, 2).ToInt();
 
-            string birthdayPart = idCard!.Substring(6, 8);
-            int year = birthdayPart.Substring(0, 4).ToInt();
-            int month = birthdayPart.Substring(4, 2).ToInt();
-            int day = birthdayPart.Substring(6, 2).ToInt();
-
-            var birthday = new DateTime(year, month, day);
-            return birthday;
+                var birthday = new DateTime(year, month, day);
+                return birthday;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("身份证号码格式错误");
+            }
         }
 
         /// <summary>
@@ -52,11 +63,16 @@
         /// <exception cref="ArgumentException"></exception>
         public static string SexFromIDCard(string? idCard)
         {
-            if (!idCard.IsIDCard()) throw new ArgumentException("身份证号码格式错误");
-
-            char genderChar = idCard![idCard.Length - 2]; // 获取倒数第二位字符
-            if (genderChar % 2 == 0) return "女";
-            else return "男";
+            try
+            {
+                char genderChar = idCard![idCard.Length - 2]; // 获取倒数第二位字符
+                if (genderChar % 2 == 0) return "女";
+                else return "男";
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("身份证号码格式错误");
+            }
         }
 
         /// <summary>
@@ -66,13 +82,19 @@
         /// <returns></returns>
         public static int AgeFromIDCard(string? idCard)
         {
-            if (!idCard.IsIDCard()) throw new ArgumentException("身份证号码格式错误");
-            var birthday = BirthdayFromIDCard(idCard);
-            DateTime currentDate = DateTime.Now;
-            int age = currentDate.Year - birthday.Year;
-            if (currentDate < birthday.AddYears(age))
-                age--;
-            return age;
+            try
+            {
+                var birthday = BirthdayFromIDCard(idCard);
+                DateTime currentDate = DateTime.Now;
+                int age = currentDate.Year - birthday.Year;
+                if (currentDate < birthday.AddYears(age))
+                    age--;
+                return age;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("身份证号码格式错误");
+            }
         }
 
         /// <summary>
@@ -94,10 +116,16 @@
                 unixTimeStamp *= 1000; // 将 10 位时间戳转换为 13 位时间戳
             else if (num != 13)
                 throw new ArgumentException("时间戳位数必须为 10 或 13");
-
-            DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            DateTime date = origin.AddMilliseconds(unixTimeStamp);
-            return date;
+            try
+            {
+                DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                DateTime date = origin.AddMilliseconds(unixTimeStamp);
+                return date;
+            }
+            catch (Exception)
+            {
+                throw new Exception("转换失败");
+            }
         }
 
         /// <summary>
@@ -113,10 +141,16 @@
                 timeStamp *= 1000; // 将 10 位时间戳转换为 13 位时间戳
             else if (num != 13)
                 throw new ArgumentException("时间戳位数必须为 10 或 13");
-
-            DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            DateTime date = origin.AddMilliseconds(timeStamp);
-            return date;
+            try
+            {
+                DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                DateTime date = origin.AddMilliseconds(timeStamp);
+                return date;
+            }
+            catch (Exception)
+            {
+                throw new Exception("转换失败");
+            }
         }
     }
 }
