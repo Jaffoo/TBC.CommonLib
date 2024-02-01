@@ -98,6 +98,75 @@
         }
 
         /// <summary>
+        /// 获取星座
+        /// </summary>
+        /// <param name="idCard"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static string GetZodiacByIdCard(string idCard)
+        {
+            try
+            {
+                var birthday = BirthdayFromIDCard(idCard);
+                int month = birthday.Month;
+                int day = birthday.Day;
+
+                if ((month == 3 && day >= 21) || (month == 4 && day <= 19))
+                {
+                    return "白羊座";
+                }
+                else if ((month == 4 && day >= 20) || (month == 5 && day <= 20))
+                {
+                    return "金牛座";
+                }
+                else if ((month == 5 && day >= 21) || (month == 6 && day <= 21))
+                {
+                    return "双子座";
+                }
+                else if ((month == 6 && day >= 22) || (month == 7 && day <= 22))
+                {
+                    return "巨蟹座";
+                }
+                else if ((month == 7 && day >= 23) || (month == 8 && day <= 22))
+                {
+                    return "狮子座";
+                }
+                else if ((month == 8 && day >= 23) || (month == 9 && day <= 22))
+                {
+                    return "处女座";
+                }
+                else if ((month == 9 && day >= 23) || (month == 10 && day <= 23))
+                {
+                    return "天秤座";
+                }
+                else if ((month == 10 && day >= 24) || (month == 11 && day <= 22))
+                {
+                    return "天蝎座";
+                }
+                else if ((month == 11 && day >= 23) || (month == 12 && day <= 21))
+                {
+                    return "射手座";
+                }
+                else if ((month == 12 && day >= 22) || (month == 1 && day <= 19))
+                {
+                    return "摩羯座";
+                }
+                else if ((month == 1 && day >= 20) || (month == 2 && day <= 18))
+                {
+                    return "水瓶座";
+                }
+                else // (month == 2 && day >= 19) || (month == 3 && day <= 20)
+                {
+                    return "双鱼座";
+                }
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("身份证号码格式错误");
+            }
+        }
+
+        /// <summary>
         /// 时间戳字符串转时间
         /// </summary>
         /// <param name="timeStamp">时间戳</param>
@@ -151,6 +220,17 @@
             {
                 throw new Exception("转换失败");
             }
+        }
+
+        /// <summary>
+        /// 获取周一的时间
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime GetMonday(DateTime date)
+        {
+            int daysToSubtract = ((int)date.DayOfWeek - 1 + 7) % 7; // 计算需要减去的天数以获取星期一
+            return date.Date.AddDays(-daysToSubtract); // 返回星期一的日期
         }
     }
 }
