@@ -1,4 +1,6 @@
-﻿namespace TBC.CommonLib
+﻿using System.Reflection;
+
+namespace TBC.CommonLib
 {
     /// <summary>
     /// 工具类
@@ -348,6 +350,36 @@
             }
             if (order.ToLower() == "desc") monthDates.Reverse();
             return monthDates;
+        }
+
+        /// <summary>
+        /// 创建对象实例
+        /// </summary>
+        /// <typeparam name="T">要创建对象的类型</typeparam>
+        /// <param name="assemblyName">类型所在程序集名称</param>
+        /// <param name="nameSpace">类型所在命名空间</param>
+        /// <param name="className">类型名</param>
+        /// <returns></returns>
+        public static T? CreateInstance<T>(string assemblyName, string nameSpace, string className)
+        {
+            var assembly = Assembly.Load(assemblyName) ?? throw new Exception("未能找到程序集");
+            object? obj = assembly.CreateInstance(nameSpace + className, false);
+            return obj == null ? throw new Exception("类实例化失败") : (T)obj;
+        }
+
+        /// <summary>
+        /// 反射字段值
+        /// </summary>
+        /// <param name="obj">反射对象</param>
+        /// <param name="propertyName">字段名称</param>
+        /// <param name="defaultVal">默认返回值</param>
+        /// <returns></returns>
+        public static object? GetPropertyValue(object? obj, string propertyName, object? defaultVal = null)
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            Type type = obj.GetType();
+            PropertyInfo? propertyInfo = type.GetProperty(propertyName);
+            return propertyInfo == null ? throw new Exception("类中属性不存在") : propertyInfo.GetValue(obj);
         }
     }
 }
