@@ -5,7 +5,12 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBC.CommonLib", "TBF.CommonLib\TBC.CommonLib.csproj", "{68949D99-98B7-4D5F-8F42-DC843B1ACBEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TBC.CommonLib.UnitTest", "TBC.CommonLib.UnitTest\TBC.CommonLib.UnitTest.csproj", "{E8BDFD94-A84E-423E-AE1D-D581C8484FA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBC.CommonLib.UnitTest", "TBC.CommonLib.UnitTest\TBC.CommonLib.UnitTest.csproj", "{E8BDFD94-A84E-423E-AE1D-D581C8484FA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B458C6E2-F39A-4757-B961-13B29A3EBFA3}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,7 +5,7 @@ namespace TBC.CommonLib
     /// <summary>
     /// 数据转换类
     /// </summary>
-    public static class Convert
+    public static class Converts
     {
         #region 字符串转其他
         /// <summary>

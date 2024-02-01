@@ -67,7 +67,7 @@ namespace TBC.CommonLib
         {
             try
             {
-                char genderChar = idCard![idCard.Length - 2]; // 获取倒数第二位字符
+                char genderChar = idCard![^2]; // 获取倒数第二位字符
                 if (genderChar % 2 == 0) return "女";
                 else return "男";
             }
