@@ -374,7 +374,7 @@ namespace TBC.CommonLib
         /// <param name="propertyName">字段名称</param>
         /// <param name="defaultVal">默认返回值</param>
         /// <returns></returns>
-        public static object? GetPropertyValue(object? obj, string propertyName, object? defaultVal = null)
+        public static object? GetPropertyValue(object? obj, string propertyName)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             Type type = obj.GetType();
