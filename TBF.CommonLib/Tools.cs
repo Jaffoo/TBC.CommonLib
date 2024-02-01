@@ -103,7 +103,7 @@
         /// <param name="idCard"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string GetZodiacByIdCard(string idCard)
+        public static string StarFromIdCard(string idCard)
         {
             try
             {
@@ -223,14 +223,131 @@
         }
 
         /// <summary>
+        /// 获取本周周一的时间
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime Monday() => Monday(DateTime.Now);
+
+        /// <summary>
         /// 获取周一的时间
         /// </summary>
-        /// <param name="date"></param>
+        /// <param name="date">日期</param>
         /// <returns></returns>
-        public static DateTime GetMonday(DateTime date)
+        public static DateTime Monday(DateTime date)
         {
             int daysToSubtract = ((int)date.DayOfWeek - 1 + 7) % 7; // 计算需要减去的天数以获取星期一
             return date.Date.AddDays(-daysToSubtract); // 返回星期一的日期
+        }
+
+        /// <summary>
+        /// 获取本月第一天
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime FirstDay() => FirstDay(DateTime.Now);
+
+        /// <summary>
+        /// 获取月第一天
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime FirstDay(DateTime date)
+        {
+            int year = date.Year;
+            int month = date.Month;
+            return new DateTime(year, month, 1);
+        }
+
+        /// <summary>
+        /// 获取本月末最后一天
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime LastDay() => LastDay(DateTime.Now);
+
+        /// <summary>
+        /// 获取月末最后一天
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime LastDay(DateTime date)
+        {
+            int year = date.Year;
+            int month = date.Month;
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+            return new DateTime(year, month, daysInMonth);
+        }
+
+        /// <summary>
+        /// 获取本周时间数组
+        /// </summary>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> ThisWeek(string order = "asc") => ThisWeek(DateTime.Now, order);
+
+        /// <summary>
+        /// 获取当前时间数组
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> ThisWeek(DateTime date, string order = "asc")
+        {
+            List<DateTime> weekDates = new();
+            DateTime startDate = date.Date.AddDays(-(int)date.DayOfWeek);
+            for (int i = 0; i < 7; i++)
+            {
+                weekDates.Add(startDate.AddDays(i));
+            }
+            if (order.ToLower() == "desc") weekDates.Reverse();
+            return weekDates;
+        }
+
+        /// <summary>
+        /// 获取当前时间近7天数组
+        /// </summary>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> RecentSevenDays(string order = "asc") => RecentSevenDays(DateTime.Now, order);
+
+        /// <summary>
+        /// 获取当前时间近7天数组
+        /// </summary>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> RecentSevenDays(DateTime date, string order = "asc")
+        {
+            List<DateTime> recentDates = new();
+            for (int i = 0; i < 7; i++)
+            {
+                recentDates.Add(date.Date.AddDays(-i));
+            }
+            if (order.ToLower() == "asc") recentDates.Reverse();
+            return recentDates;
+        }
+
+        /// <summary>
+        /// 获取本月数组
+        /// </summary>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> ThisMoney(string order = "asc") => ThisMoney(DateTime.Now, order);
+
+        /// <summary>
+        /// 获取当月数组
+        /// </summary>
+        /// <param name="date">时间</param>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> ThisMoney(DateTime date, string order = "asc")
+        {
+            List<DateTime> monthDates = new();
+            var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
+            for (int i = 1; i <= daysInMonth; i++)
+            {
+                monthDates.Add(new DateTime(date.Year, date.Month, i)); // 将本月的日期加入列表
+            }
+            if (order.ToLower() == "desc") monthDates.Reverse();
+            return monthDates;
         }
     }
 }
