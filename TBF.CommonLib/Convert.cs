@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TBC.CommonLib
 {
@@ -13,11 +14,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static int ToInt(this string str)
         {
             var b = int.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -37,11 +38,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static ushort ToUshort(this string str)
         {
             var b = ushort.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -61,11 +62,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static short ToShort(this string str)
         {
             var b = short.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -85,11 +86,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static uint ToUint(this string str)
         {
             var b = uint.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -109,11 +110,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static long ToLong(this string str)
         {
             var b = long.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -133,11 +134,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static ulong ToUlong(this string str)
         {
             var b = ulong.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -157,11 +158,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static double ToDouble(this string str)
         {
             var b = double.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -181,11 +182,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static float ToFloat(this string str)
         {
             var b = float.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -205,11 +206,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static decimal ToDecimal(this string str)
         {
             var b = decimal.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -229,11 +230,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static bool ToBool(this string str)
         {
             var b = bool.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -253,11 +254,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static DateTime ToDateTime(this string str)
         {
             var b = DateTime.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -277,11 +278,11 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public static byte ToByte(this string str)
         {
             var b = byte.TryParse(str, out var val);
-            if (!b) throw new ArgumentException("转换失败");
+            if (!b) throw new Exception("转换失败");
             return val;
         }
 
@@ -304,7 +305,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static T ToEnum<T>(this string str) where T : struct
         {
-            if (!Enum.TryParse(str, out T result)) throw new ArgumentException("转换失败");
+            if (!Enum.TryParse(str, out T result)) throw new Exception("转换失败");
             return result;
         }
 
@@ -317,7 +318,77 @@ namespace TBC.CommonLib
         public static T ToModel<T>(this string str) where T : class
         {
             var res = JsonConvert.DeserializeObject<T>(str);
-            return res ?? throw new ArgumentException("转换失败");
+            return res ?? throw new Exception("转换失败");
+        }
+
+        /// <summary>
+        /// 获取json字符串的键的值
+        /// </summary>
+        /// <param name="str">json字符串</param>
+        /// <param name="key">键</param>
+        /// <returns></returns>
+        public static string Fetch(this string str, string key)
+        {
+            if (str.IsValidJson())
+            {
+                var res = JObject.Parse(str);
+                return res[key]?.ToString() ?? "";
+            }
+            else return "";
+        }
+
+        /// <summary>
+        /// 获取json字符串的键的值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="str">json字符串</param>
+        /// <param name="key">键</param>
+        /// <returns></returns>
+        public static T? Fetch<T>(this string str, string key)
+        {
+            if (str.IsValidJson())
+            {
+                var res = JObject.Parse(str);
+                var val = res[key];
+                if (val == null) return default;
+                return val.ToObject<T>();
+            }
+            else return default;
+        }
+
+        /// <summary>
+        /// 字符串转JObject
+        /// </summary>
+        /// <param name="str">json字符串</param>
+        /// <returns></returns>
+        public static JObject? ToJObject(this string str)
+        {
+            try
+            {
+                return JObject.Parse(str);
+            }
+            catch (JsonReaderException)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 是否是json字符串
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <returns></returns>
+        public static bool IsValidJson(this string jsonString)
+        {
+            try
+            {
+                _ = JsonConvert.DeserializeObject(jsonString);
+                return true;
+            }
+            catch (JsonReaderException)
+            {
+                return false;
+            }
         }
         #endregion
 
@@ -335,7 +406,7 @@ namespace TBC.CommonLib
         }
         #endregion
 
-        #region object转其他
+        #region 类转json字符串
         /// <summary>
         /// 类转json字符串
         /// </summary>
@@ -343,11 +414,11 @@ namespace TBC.CommonLib
         /// <param name="value">实体类</param>
         /// <param name="format">格式化方式</param>
         /// <returns></returns>
-        public static string ToJsonString<T>(this T value, Formatting format = Formatting.Indented) where T : class
+        public static string ToJsonStr<T>(this T value, Formatting format = Formatting.Indented) where T : class
         {
-            if (value == null) return "";
+            if (value == null) throw new ArgumentNullException();
             var jsonStr = JsonConvert.SerializeObject(value, format);
-            return jsonStr ?? "";
+            return jsonStr;
         }
         #endregion
     }
