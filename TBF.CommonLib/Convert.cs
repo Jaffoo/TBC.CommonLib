@@ -332,9 +332,9 @@ namespace TBC.CommonLib
             if (str.IsValidJson())
             {
                 var res = JObject.Parse(str);
-                return res[key]?.ToString() ?? "";
+                return res[key]?.ToString() ?? throw new Exception("键不存在！");
             }
-            else return "";
+            throw new Exception("非json字符串！");
         }
 
         /// <summary>
@@ -344,16 +344,16 @@ namespace TBC.CommonLib
         /// <param name="str">json字符串</param>
         /// <param name="key">键</param>
         /// <returns></returns>
-        public static T? Fetch<T>(this string str, string key)
+        public static T Fetch<T>(this string str, string key)
         {
             if (str.IsValidJson())
             {
                 var res = JObject.Parse(str);
-                var val = res[key];
-                if (val == null) return default;
-                return val.ToObject<T>();
+                var val = res[key] ?? throw new Exception("键不存在！");
+                var fin = val.ToObject<T>();
+                return fin == null ? throw new Exception("类型转换失败！") : fin;
             }
-            else return default;
+            throw new Exception("非json字符串！");
         }
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="str">json字符串</param>
         /// <returns></returns>
-        public static JObject? ToJObject(this string str)
+        public static JObject ToJObject(this string str)
         {
             try
             {
@@ -390,6 +390,44 @@ namespace TBC.CommonLib
                 return false;
             }
         }
+
+        /// <summary>
+        /// 字符串转list
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="splitCahr">分割符</param>
+        /// <returns></returns>
+        public static List<string> ToStrList(this string str, char splitCahr = 'c')
+        {
+            try
+            {
+                var list = str.Split(splitCahr).ToList();
+                return list ?? throw new Exception("转换失败");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("转换失败：" + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 字符串转list
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="splitCahr">分割符</param>
+        /// <returns></returns>
+        public static List<int> TointList(this string str, char splitCahr = 'c')
+        {
+            try
+            {
+                var list = str.Split(splitCahr).Select(t => t.ToInt()).ToList();
+                return list ?? throw new Exception("转换失败");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("转换失败：" + e.Message);
+            }
+        }
         #endregion
 
         #region int/long转其他
@@ -399,10 +437,17 @@ namespace TBC.CommonLib
         /// <typeparam name="T">枚举</typeparam>
         /// <param name="value">枚举值</param>
         /// <returns></returns>
-        public static T? ToEnum<T>(this int value) where T : struct
+        public static T ToEnum<T>(this int value) where T : struct
         {
-            if (Enum.IsDefined(typeof(T), value)) return (T)(object)value;
-            else return null;
+            try
+            {
+                if (Enum.IsDefined(typeof(T), value)) return (T)(object)value;
+                throw new Exception("转换失败");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
 
@@ -416,9 +461,15 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static string ToJsonStr<T>(this T value, Formatting format = Formatting.Indented) where T : class
         {
-            if (value == null) throw new ArgumentNullException();
-            var jsonStr = JsonConvert.SerializeObject(value, format);
-            return jsonStr;
+            try
+            {
+                var jsonStr = JsonConvert.SerializeObject(value, format);
+                return jsonStr;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
     }

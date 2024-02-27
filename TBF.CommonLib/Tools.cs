@@ -360,11 +360,18 @@ namespace TBC.CommonLib
         /// <param name="nameSpace">类型所在命名空间</param>
         /// <param name="className">类型名</param>
         /// <returns></returns>
-        public static T? CreateInstance<T>(string assemblyName, string nameSpace, string className)
+        public static T CreateInstance<T>(string assemblyName, string nameSpace, string className)
         {
-            var assembly = Assembly.Load(assemblyName) ?? throw new Exception("未能找到程序集");
-            object? obj = assembly.CreateInstance(nameSpace + className, false);
-            return obj == null ? throw new Exception("类实例化失败") : (T)obj;
+            try
+            {
+                var assembly = Assembly.Load(assemblyName) ?? throw new Exception("未能找到程序集");
+                object? obj = assembly.CreateInstance(nameSpace + className, false);
+                return obj == null ? throw new Exception("类实例化失败") : (T)obj;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -372,14 +379,43 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="obj">反射对象</param>
         /// <param name="propertyName">字段名称</param>
-        /// <param name="defaultVal">默认返回值</param>
         /// <returns></returns>
-        public static object? GetPropertyValue(object? obj, string propertyName)
+        public static T? GetPropertyValue<T>(object obj, string propertyName)
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-            Type type = obj.GetType();
-            PropertyInfo? propertyInfo = type.GetProperty(propertyName);
-            return propertyInfo == null ? throw new Exception("类中属性不存在") : propertyInfo.GetValue(obj);
+            try
+            {
+                if (obj == null) throw new ArgumentNullException(nameof(obj));
+                Type type = obj.GetType();
+                PropertyInfo propertyInfo = type.GetProperty(propertyName) ?? throw new Exception("类中属性不存在");
+                var res = (T?)propertyInfo.GetValue(obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 反射字段值
+        /// </summary>
+        /// <param name="obj">反射对象</param>
+        /// <param name="propertyName">字段名称</param>
+        /// <returns></returns>
+        public static object? GetPropertyValue(object obj, string propertyName)
+        {
+            try
+            {
+                if (obj == null) throw new ArgumentNullException(nameof(obj));
+                Type type = obj.GetType();
+                PropertyInfo propertyInfo = type.GetProperty(propertyName) ?? throw new Exception("类中属性不存在");
+                var res = propertyInfo.GetValue(obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
