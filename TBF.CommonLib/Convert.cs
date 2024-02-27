@@ -416,7 +416,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static List<int> TointList(this string str, char splitCahr = ',')
+        public static List<int> ToIntList(this string str, char splitCahr = ',')
         {
             try
             {
