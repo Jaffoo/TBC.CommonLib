@@ -380,7 +380,7 @@ namespace TBC.CommonLib
         /// <param name="obj">反射对象</param>
         /// <param name="propertyName">字段名称</param>
         /// <returns></returns>
-        public static T? GetPropertyValue<T>(object obj, string propertyName)
+        public static T? GetPropValue<T>(object obj, string propertyName)
         {
             try
             {
@@ -402,7 +402,7 @@ namespace TBC.CommonLib
         /// <param name="obj">反射对象</param>
         /// <param name="propertyName">字段名称</param>
         /// <returns></returns>
-        public static object? GetPropertyValue(object obj, string propertyName)
+        public static object? GetPropValue(object obj, string propertyName)
         {
             try
             {
