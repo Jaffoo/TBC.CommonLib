@@ -16,7 +16,7 @@ namespace TBC.CommonLib
         /// <param name="charStr">隐藏替换符号</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string PhoneHide(string? phone, int num = 5, int start = 3, string charStr = "*")
+        public static string PhoneHide(string phone, int num = 5, int start = 3, string charStr = "*")
         {
             try
             {
@@ -34,12 +34,38 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// 字符串脱敏
+        /// </summary>
+        /// <param name="str">脱敏字符串</param>
+        /// <param name="num">隐藏几位</param>
+        /// <param name="start">开始脱敏索引</param>
+        /// <param name="charStr">隐藏替换符号</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static string StringHide(string str, int num, int start, string charStr = "*")
+        {
+            try
+            {
+                if (start >= str.Length) throw new Exception("脱敏开始索引大于脱敏字符串长度");
+                if (num + start >= str.Length) num = str.Length - start;
+                var numStr = str!.Substring(start, num);
+                charStr = new string(charStr[0], num);
+                var result = str.Replace(numStr, charStr);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("电话号码格式错误");
+            }
+        }
+
+        /// <summary>
         /// 从身份证号码中提取出生日期
         /// </summary>
         /// <param name="idCard"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static DateTime BirthdayFromIDCard(string? idCard)
+        public static DateTime BirthdayFromIDCard(string idCard)
         {
             try
             {
@@ -63,7 +89,7 @@ namespace TBC.CommonLib
         /// <param name="idCard"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string SexFromIDCard(string? idCard)
+        public static string SexFromIDCard(string idCard)
         {
             try
             {
@@ -82,7 +108,7 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="idCard"></param>
         /// <returns></returns>
-        public static int AgeFromIDCard(string? idCard)
+        public static int AgeFromIDCard(string idCard)
         {
             try
             {
@@ -175,7 +201,7 @@ namespace TBC.CommonLib
         /// <param name="num">时间戳位数</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static DateTime TimeStampToDate(string? timeStamp, int num = 13)
+        public static DateTime TimeStampToDate(string timeStamp, int num = 13)
         {
             if (string.IsNullOrWhiteSpace(timeStamp))
                 throw new ArgumentException("时间戳不能为空");
@@ -332,7 +358,7 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="order">排序方式</param>
         /// <returns></returns>
-        public static List<DateTime> ThisMoney(string order = "asc") => ThisMoney(DateTime.Now, order);
+        public static List<DateTime> ThisMonth(string order = "asc") => ThisMonth(DateTime.Now, order);
 
         /// <summary>
         /// 获取当月数组
@@ -340,7 +366,7 @@ namespace TBC.CommonLib
         /// <param name="date">时间</param>
         /// <param name="order">排序方式</param>
         /// <returns></returns>
-        public static List<DateTime> ThisMoney(DateTime date, string order = "asc")
+        public static List<DateTime> ThisMonth(DateTime date, string order = "asc")
         {
             List<DateTime> monthDates = new();
             var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
