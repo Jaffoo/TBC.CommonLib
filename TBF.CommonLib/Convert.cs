@@ -8,7 +8,6 @@ namespace TBC.CommonLib
     /// </summary>
     public static class Converts
     {
-        #region 字符串转其他
         /// <summary>
         /// 字符串转int
         /// </summary>
@@ -428,9 +427,7 @@ namespace TBC.CommonLib
                 throw new Exception("转换失败：" + e.Message);
             }
         }
-        #endregion
 
-        #region int/long转其他
         /// <summary>
         /// 转枚举
         /// </summary>
@@ -449,9 +446,28 @@ namespace TBC.CommonLib
                 throw;
             }
         }
-        #endregion
 
-        #region 类转json字符串
+        /// <summary>
+        /// date转时间戳
+        /// </summary>
+        /// <param name="date">时间</param>
+        /// <param name="Millisecond">true:转毫秒级(默认),false:转秒级</param>
+        /// <returns></returns>
+        public static long ToTimeStamp(this DateTime date, bool Millisecond = true)
+        {
+            try
+            {
+                long timestamp;
+                if (Millisecond) timestamp = new DateTimeOffset(date).ToUnixTimeSeconds();
+                else timestamp = new DateTimeOffset(date).ToUnixTimeMilliseconds();
+                return timestamp;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// 类转json字符串
         /// </summary>
@@ -471,6 +487,5 @@ namespace TBC.CommonLib
                 throw;
             }
         }
-        #endregion
     }
 }

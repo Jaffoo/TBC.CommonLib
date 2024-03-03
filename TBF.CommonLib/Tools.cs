@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using Newtonsoft.Json;
+using System.Reflection;
+using System.Text;
 
 namespace TBC.CommonLib
 {
@@ -251,12 +253,6 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取本周周一的时间
-        /// </summary>
-        /// <returns></returns>
-        public static DateTime Monday() => Monday(DateTime.Now);
-
-        /// <summary>
         /// 获取周一的时间
         /// </summary>
         /// <param name="date">日期</param>
@@ -268,14 +264,7 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取本月第一天
-        /// </summary>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        public static DateTime FirstDay() => FirstDay(DateTime.Now);
-
-        /// <summary>
-        /// 获取月第一天
+        /// 获取某月第一天
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
@@ -285,12 +274,6 @@ namespace TBC.CommonLib
             int month = date.Month;
             return new DateTime(year, month, 1);
         }
-
-        /// <summary>
-        /// 获取本月末最后一天
-        /// </summary>
-        /// <returns></returns>
-        public static DateTime LastDay() => LastDay(DateTime.Now);
 
         /// <summary>
         /// 获取月末最后一天
@@ -306,14 +289,7 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取本周时间数组
-        /// </summary>
-        /// <param name="order">排序方式</param>
-        /// <returns></returns>
-        public static List<DateTime> ThisWeek(string order = "asc") => ThisWeek(DateTime.Now, order);
-
-        /// <summary>
-        /// 获取当前时间数组
+        /// 获取某时间所在周的数组
         /// </summary>
         /// <param name="date"></param>
         /// <param name="order">排序方式</param>
@@ -331,14 +307,7 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取当前时间近7天数组
-        /// </summary>
-        /// <param name="order">排序方式</param>
-        /// <returns></returns>
-        public static List<DateTime> RecentSevenDays(string order = "asc") => RecentSevenDays(DateTime.Now, order);
-
-        /// <summary>
-        /// 获取当前时间近7天数组
+        /// 获取某个时间近7天数组
         /// </summary>
         /// <param name="order">排序方式</param>
         /// <returns></returns>
@@ -354,14 +323,7 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取本月数组
-        /// </summary>
-        /// <param name="order">排序方式</param>
-        /// <returns></returns>
-        public static List<DateTime> ThisMonth(string order = "asc") => ThisMonth(DateTime.Now, order);
-
-        /// <summary>
-        /// 获取当月数组
+        /// 获取某月数组
         /// </summary>
         /// <param name="date">时间</param>
         /// <param name="order">排序方式</param>
@@ -439,6 +401,122 @@ namespace TBC.CommonLib
                 return res;
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        private static readonly HttpClient _httpClient = new();
+
+        /// <summary>
+        /// get请求
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="headers">请求头</param>
+        /// <returns></returns>
+        public static async Task<string> GetAsync(string url, Dictionary<string, string>? headers = null)
+        {
+            try
+            {
+                if (headers != null)
+                {
+                    foreach (var item in headers)
+                    {
+                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+                    }
+                }
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get请求
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="headers">请求头</param>
+        /// <returns></returns>
+        public static async Task<T> GetAsync<T>(string url, Dictionary<string, string>? headers = null)
+        {
+            try
+            {
+                if (headers != null)
+                {
+                    foreach (var item in headers)
+                    {
+                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+                    }
+                }
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                var res = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<T>(res) ?? throw new Exception("类型转换失败！");
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// post请求
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="jsonBody">请求body</param>
+        /// <param name="headers">请求头</param>
+        /// <returns></returns>
+        public static async Task<string> PostAsync(string url, string jsonBody, Dictionary<string, string>? headers = null)
+        {
+            try
+            {
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                if (headers != null)
+                {
+                    foreach (var item in headers)
+                    {
+                        content.Headers.Add(item.Key, item.Value);
+                    }
+                }
+                HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// post请求
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="jsonBody">请求body</param>
+        /// <param name="headers">请求头</param>
+        /// <returns></returns>
+        public static async Task<T> PostAsync<T>(string url, string jsonBody, Dictionary<string, string>? headers = null)
+        {
+            try
+            {
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                if (headers != null)
+                {
+                    foreach (var item in headers)
+                    {
+                        content.Headers.Add(item.Key, item.Value);
+                    }
+                }
+                HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+                response.EnsureSuccessStatusCode();
+                var res = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<T>(res) ?? throw new Exception("类型转换失败！");
+            }
+            catch (HttpRequestException)
             {
                 throw;
             }
