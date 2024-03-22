@@ -8,10 +8,7 @@ namespace TBC.CommonLib.UnitTest
         {
             try
             {
-                var idcard = "530128";
-                var birthday = Tools.BirthdayFromIDCard(idcard);
-                var sex = Tools.SexFromIDCard(idcard);
-                var age = Tools.AgeFromIDCard(idcard);
+                var idcard = "530128".ToLong();
             }
             catch (Exception e)
             {

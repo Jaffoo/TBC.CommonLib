@@ -27,7 +27,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static int ToInt(this string? str, int defaultVal)
+        public static int ToInt(this string? str, int defaultVal = 0)
         {
             return int.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -51,7 +51,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static ushort ToUshort(this string? str, ushort defaultVal)
+        public static ushort ToUshort(this string? str, ushort defaultVal = 0)
         {
             return ushort.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -75,7 +75,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static short ToShort(this string? str, short defaultVal)
+        public static short ToShort(this string? str, short defaultVal = 0)
         {
             return short.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -99,7 +99,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static uint ToUint(this string? str, uint defaultVal)
+        public static uint ToUint(this string? str, uint defaultVal = 0)
         {
             return uint.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -123,7 +123,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static long ToLong(this string? str, long defaultVal)
+        public static long ToLong(this string? str, long defaultVal = 0)
         {
             return long.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -147,7 +147,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static ulong ToUlong(this string? str, ulong defaultVal)
+        public static ulong ToUlong(this string? str, ulong defaultVal = 0)
         {
             return ulong.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -171,7 +171,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static double ToDouble(this string? str, double defaultVal)
+        public static double ToDouble(this string? str, double defaultVal = 0)
         {
             return double.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -195,7 +195,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static float ToFloat(this string? str, float defaultVal)
+        public static float ToFloat(this string? str, float defaultVal = 0)
         {
             return float.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -219,7 +219,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static decimal ToDecimal(this string? str, decimal defaultVal)
+        public static decimal ToDecimal(this string? str, decimal defaultVal = 0)
         {
             return decimal.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -243,7 +243,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static bool ToBool(this string? str, bool defaultVal)
+        public static bool ToBool(this string? str, bool defaultVal = false)
         {
             return bool.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -291,7 +291,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static byte ToByte(this string? str, byte defaultVal)
+        public static byte ToByte(this string? str, byte defaultVal = 0)
         {
             return byte.TryParse(str, out var val) ? val : defaultVal;
         }
