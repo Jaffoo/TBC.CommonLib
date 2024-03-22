@@ -9,6 +9,7 @@ namespace TBC.CommonLib
     /// </summary>
     public class Tools
     {
+        #region 敏感信息脱敏
         /// <summary>
         /// 电话号码脱敏
         /// </summary>
@@ -60,7 +61,9 @@ namespace TBC.CommonLib
                 throw new ArgumentException("电话号码格式错误");
             }
         }
+        #endregion
 
+        #region 身份证
         /// <summary>
         /// 从身份证号码中提取出生日期
         /// </summary>
@@ -128,7 +131,7 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取星座
+        /// 身份证获取星座
         /// </summary>
         /// <param name="idCard"></param>
         /// <returns></returns>
@@ -195,7 +198,9 @@ namespace TBC.CommonLib
                 throw new ArgumentException("身份证号码格式错误");
             }
         }
+        #endregion
 
+        #region 时间
         /// <summary>
         /// 时间戳字符串转时间
         /// </summary>
@@ -339,7 +344,9 @@ namespace TBC.CommonLib
             if (order.ToLower() == "desc") monthDates.Reverse();
             return monthDates;
         }
+        #endregion
 
+        #region 反射
         /// <summary>
         /// 创建对象实例
         /// </summary>
@@ -405,8 +412,9 @@ namespace TBC.CommonLib
                 throw;
             }
         }
+        #endregion
 
-
+        #region 网络请求
         private static readonly HttpClient _httpClient = new();
 
         /// <summary>
@@ -521,5 +529,6 @@ namespace TBC.CommonLib
                 throw;
             }
         }
+        #endregion
     }
 }
