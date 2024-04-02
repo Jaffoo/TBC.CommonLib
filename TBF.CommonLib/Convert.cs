@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace TBC.CommonLib
 {
@@ -486,6 +488,21 @@ namespace TBC.CommonLib
             {
                 throw;
             }
+        }
+    
+        /// <summary>
+        /// 获取枚举描述
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetDescription<T>(this T value) where T : Enum
+        {
+            Type type = typeof(T);
+            string name = Enum.GetName(type, value)!;
+            MemberInfo member = type.GetMember(name)[0];
+            DescriptionAttribute? attribute = member.GetCustomAttribute<DescriptionAttribute>();
+            return attribute != null ? attribute.Description : name;
         }
     }
 }
