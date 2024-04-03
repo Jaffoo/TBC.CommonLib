@@ -348,19 +348,42 @@ namespace TBC.CommonLib
 
         #region 反射
         /// <summary>
+        /// 获取某个命名空间下所有类的默认实例
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="namespace"></param>
+        /// <returns></returns>
+        public static IEnumerable<T?> CreateInstances<T>(string @namespace) where T : class
+        {
+            return Assembly
+            .GetExecutingAssembly()
+            .GetTypes()
+            .Where(type => type.FullName != null)
+            .Where(type => type.FullName!.Contains(@namespace))
+            .Where(type => !type.IsAbstract)
+            .Select(type =>
+            {
+                if (Activator.CreateInstance(type) is T instance)
+                    return instance;
+                return null;
+            })
+            .Where(i => i != null);
+        }
+
+        /// <summary>
         /// 创建对象实例
         /// </summary>
         /// <typeparam name="T">要创建对象的类型</typeparam>
         /// <param name="assemblyName">类型所在程序集名称</param>
-        /// <param name="nameSpace">类型所在命名空间</param>
+        /// <param name="namespace">类型所在命名空间</param>
         /// <param name="className">类型名</param>
         /// <returns></returns>
-        public static T CreateInstance<T>(string assemblyName, string nameSpace, string className)
+        public static T CreateInstance<T>(string assemblyName, string @namespace, string className) where T : class
         {
             try
             {
                 var assembly = Assembly.Load(assemblyName) ?? throw new Exception("未能找到程序集");
-                object? obj = assembly.CreateInstance(nameSpace + className, false);
+                object? obj = assembly.CreateInstance(@namespace + className, false);
                 return obj == null ? throw new Exception("类实例化失败") : (T)obj;
             }
             catch (Exception)
