@@ -353,9 +353,9 @@ namespace TBC.CommonLib
         /// <typeparam name="T"></typeparam>
         /// <param name="namespace"></param>
         /// <returns></returns>
-        public static IEnumerable<T?> CreateInstances<T>(string @namespace) where T : class
+        public static IEnumerable<T> CreateInstances<T>(string @namespace) where T : class
         {
-            return Assembly
+            var list = Assembly
             .GetExecutingAssembly()
             .GetTypes()
             .Where(type => type.FullName != null)
@@ -368,6 +368,7 @@ namespace TBC.CommonLib
                 return null;
             })
             .Where(i => i != null);
+            return list!;
         }
 
         /// <summary>
