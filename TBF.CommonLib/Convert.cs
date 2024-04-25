@@ -504,5 +504,24 @@ namespace TBC.CommonLib
             DescriptionAttribute? attribute = member.GetCustomAttribute<DescriptionAttribute>();
             return attribute != null ? attribute.Description : name;
         }
+
+        /// <summary>
+        /// 深拷贝
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T DeepClone<T>(this T value) where T: class
+        {
+            try
+            {
+                var jsonStr = value.ToJsonStr();
+                return jsonStr.ToModel<T>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
