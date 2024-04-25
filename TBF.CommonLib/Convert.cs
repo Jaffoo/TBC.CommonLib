@@ -375,6 +375,23 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// 字符串转JArray
+        /// </summary>
+        /// <param name="str">json字符串</param>
+        /// <returns></returns>
+        public static JArray ToJArray(this string str)
+        {
+            try
+            {
+                return JArray.Parse(str);
+            }
+            catch (JsonReaderException)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// 是否是json字符串
         /// </summary>
         /// <param name="jsonString"></param>
@@ -398,7 +415,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static List<string> ToStrList(this string str, char splitCahr = ',')
+        public static List<string> StrToListStr(this string str, char splitCahr = ',')
         {
             try
             {
@@ -412,12 +429,31 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// list转字符串
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="splitCahr">分割符</param>
+        /// <returns></returns>
+        public static string ListStrToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
+        {
+            try
+            {
+                var str = string.Join(splitCahr, list);
+                return str ?? throw new Exception("转换失败");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("转换失败：" + e.Message);
+            }
+        }
+
+        /// <summary>
         /// 字符串转list
         /// </summary>
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static List<int> ToIntList(this string str, char splitCahr = ',')
+        public static List<int> StrToListInt(this string str, char splitCahr = ',')
         {
             try
             {

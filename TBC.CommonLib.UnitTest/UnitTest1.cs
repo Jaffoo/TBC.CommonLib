@@ -8,7 +8,7 @@ namespace TBC.CommonLib.UnitTest
         {
             try
             {
-                var idcard = Tools.PhoneHide("18787145600");
+                var idcard = "530128".ToLong();
             }
             catch (Exception e)
             {
