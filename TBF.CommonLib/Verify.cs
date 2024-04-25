@@ -55,7 +55,7 @@ namespace TBC.CommonLib
         public static bool IsUrl(this string? value)
         {
             if (string.IsNullOrWhiteSpace(value)) return false;
-            string pattern = @"^(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$";
+            string pattern = @"^((https|http|ftp|rtsp|mms|ws|wss)?:\/\/)[^\s]+";
             return Regex.IsMatch(value, pattern);
         }
 

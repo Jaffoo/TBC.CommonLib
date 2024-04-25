@@ -19,7 +19,7 @@ namespace TBC.CommonLib
         /// <param name="charStr">隐藏替换符号</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string PhoneHide(string phone, int num = 5, int start = 3, string charStr = "*")
+        public static string PhoneHide(string phone, int num = 4, int start = 3, string charStr = "*")
         {
             try
             {
@@ -58,7 +58,7 @@ namespace TBC.CommonLib
             }
             catch (Exception)
             {
-                throw new ArgumentException("电话号码格式错误");
+                throw;
             }
         }
         #endregion

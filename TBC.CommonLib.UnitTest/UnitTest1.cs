@@ -8,8 +8,6 @@ namespace TBC.CommonLib.UnitTest
         {
             try
             {
-                List<string> ssr = new();
-                ssr.ListStrToStr();
                 var idcard = "530128".ToLong();
             }
             catch (Exception e)
