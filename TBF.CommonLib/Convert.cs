@@ -375,6 +375,23 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// 字符串转JArray
+        /// </summary>
+        /// <param name="str">json字符串</param>
+        /// <returns></returns>
+        public static JArray ToJArray(this string str)
+        {
+            try
+            {
+                return JArray.Parse(str);
+            }
+            catch (JsonReaderException)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// 是否是json字符串
         /// </summary>
         /// <param name="jsonString"></param>
