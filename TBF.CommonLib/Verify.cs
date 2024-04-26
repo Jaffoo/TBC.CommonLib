@@ -8,6 +8,26 @@ namespace TBC.CommonLib
     public static class Verify
     {
         /// <summary>
+        /// 判断是否为空或空字符串
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public  static bool IsNullOrEmpty(this string? value)
+        {
+            return string.IsNullOrEmpty(value);
+        }
+
+        /// <summary>
+        /// 判断是否为空或空字符串
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsNullOrWhiteSpace(this string? value)
+        {
+            return string.IsNullOrWhiteSpace(value);
+        }
+
+        /// <summary>
         /// 判断是否为有效的Email地址
         /// </summary>
         /// <returns></returns>
@@ -72,6 +92,28 @@ namespace TBC.CommonLib
             @"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." +
             @"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
             return Regex.IsMatch(value, pattern);
+        }
+
+        /// <summary>
+        /// 判断字符串是否全是数字
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsNumber(this string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return false;
+            return Regex.IsMatch(value, @"^[0-9]*$");
+        }
+
+        /// <summary>
+        /// 判断字符串是否全是英文字母
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsLetter(this string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return false;
+            return Regex.IsMatch(value, @"^[a-zA-Z]*$");
         }
     }
 }

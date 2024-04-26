@@ -415,7 +415,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static List<string> StrToListStr(this string str, char splitCahr = ',')
+        public static List<string> ToListStr(this string str, char splitCahr = ',')
         {
             try
             {
@@ -434,7 +434,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static string ListStrToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
+        public static string ToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
         {
             try
             {
@@ -453,7 +453,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static List<int> StrToListInt(this string str, char splitCahr = ',')
+        public static List<int> ToListInt(this string str, char splitCahr = ',')
         {
             try
             {
