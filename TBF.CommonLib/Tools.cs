@@ -1,13 +1,16 @@
 ﻿using Newtonsoft.Json;
+using System.Web;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace TBC.CommonLib
 {
     /// <summary>
     /// 工具类
     /// </summary>
-    public class Tools
+    public static class Tools
     {
         #region 敏感信息脱敏
         /// <summary>
@@ -552,6 +555,144 @@ namespace TBC.CommonLib
             {
                 throw;
             }
+        }
+        #endregion
+
+        #region MD5
+        /// <summary>
+        /// MD5信息摘要
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string MD5Encrypt(string str)
+        {
+            string result = "";
+            var buffer = Encoding.UTF8.GetBytes(str);
+            var md5 = MD5.HashData(buffer);
+            foreach (var item in md5)
+            {
+                result += item.ToString("x2");
+            }
+            return result;
+        }
+        #endregion
+
+        #region AES加密/解密
+        /// <summary>
+        /// AES加密
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="key"></param>
+        /// <param name="iv"></param>
+        /// <returns></returns>
+        public static byte[] AESEncrypt(string plainText, byte[] key, byte[] iv)
+        {
+            using Aes aes = Aes.Create();
+            aes.Key = key;
+            aes.IV = iv;
+
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+            using MemoryStream msEncrypt = new();
+            using CryptoStream csEncrypt = new(msEncrypt, encryptor, CryptoStreamMode.Write);
+            using (StreamWriter swEncrypt = new(csEncrypt))
+            {
+                swEncrypt.Write(plainText);
+            }
+            return msEncrypt.ToArray();
+        }
+
+        /// <summary>
+        /// AES解密
+        /// </summary>
+        /// <param name="cipherText"></param>
+        /// <param name="key"></param>
+        /// <param name="iv"></param>
+        /// <returns></returns>
+        public static string AESDecrypt(byte[] cipherText, byte[] key, byte[] iv)
+        {
+            using Aes aes = Aes.Create();
+            aes.Key = key;
+            aes.IV = iv;
+
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+            using MemoryStream msDecrypt = new(cipherText);
+            using CryptoStream csDecrypt = new(msDecrypt, decryptor, CryptoStreamMode.Read);
+            using StreamReader srDecrypt = new(csDecrypt);
+            return srDecrypt.ReadToEnd();
+        }
+        #endregion
+
+        #region RSA加密/解密
+        /// <summary>
+        /// RSA加密
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        public static byte[] Encrypt(string plainText, RSAParameters publicKey)
+        {
+            using RSACryptoServiceProvider rsa = new();
+            rsa.ImportParameters(publicKey);
+            return rsa.Encrypt(Encoding.UTF8.GetBytes(plainText), true);
+        }
+
+        /// <summary>
+        /// RSA解密
+        /// </summary>
+        /// <param name="cipherText"></param>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
+        public static string Decrypt(byte[] cipherText, RSAParameters privateKey)
+        {
+            using RSACryptoServiceProvider rsa = new();
+            rsa.ImportParameters(privateKey);
+            return Encoding.UTF8.GetString(rsa.Decrypt(cipherText, true));
+        }
+        #endregion
+
+        #region HttpContext
+        /// <summary>
+        /// 获取ip
+        /// </summary>
+        /// <param name="httpRequest"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static string GetIPAddress(this HttpContext context)
+        {
+            return (context.Connection.RemoteIpAddress?.ToString()) ?? throw new Exception("ip地址获取失败");
+        }
+
+        /// <summary>
+        /// 绝对url
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static string GetAbsoluteUri(this HttpRequest request)
+        {
+            return new StringBuilder()
+                .Append(request.Scheme)
+                .Append("://")
+                .Append(request.Host)
+                .Append(request.PathBase)
+                .Append(request.Path)
+                .Append(request.QueryString)
+                .ToString();
+        }
+
+        /// <summary>
+        /// 获取相对URL
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static string GetRelativeUri(this HttpRequest request)
+        {
+            return new StringBuilder()
+                .Append(request.PathBase)
+                .Append(request.Path)
+                .Append(request.QueryString)
+                .ToString();
         }
         #endregion
     }
