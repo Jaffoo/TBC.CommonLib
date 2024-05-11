@@ -695,5 +695,106 @@ namespace TBC.CommonLib
                 .ToString();
         }
         #endregion
+
+        #region 文件夹操作
+
+        /// <summary>
+        /// 复制文件夹
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="toPath"></param>
+        /// <param name="ignoreDir"></param>
+        /// <param name="ignoreFile"></param>
+        public static void CopyTo(string source, string toPath, List<string>? ignoreDir = null, List<string>? ignoreFile = null)
+        {
+            try
+            {
+                if (!Directory.Exists(source)) throw new Exception("要移动的目录不存在！");
+                if (Directory.Exists(toPath)) throw new Exception("目标目录已存在！");
+                Directory.CreateDirectory(toPath);
+                //递归创建文件夹
+                var sourceInfo = new DirectoryInfo(source);
+                CreateAllDir(sourceInfo, toPath, ignoreDir);
+                //递归复制文件
+                CopyAllFile(sourceInfo, toPath, ignoreDir);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 复制文件夹
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="toPath"></param>
+        /// <param name="ignoreDir"></param>
+        /// <param name="ignoreFile"></param>
+        public static void CopyTo(this DirectoryInfo source, string toPath, List<string>? ignoreDir = null, List<string>? ignoreFile = null)
+        {
+            try
+            {
+                if (Directory.Exists(toPath)) throw new Exception("目标目录已存在！");
+                Directory.CreateDirectory(toPath);
+                //递归创建文件夹
+                CreateAllDir(source, toPath, ignoreDir);
+                //递归复制文件
+                CopyAllFile(source, toPath, ignoreDir);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 递归创建目录文件夹
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="toPath"></param>
+        /// <param name="ignoreList"></param>
+        private static void CreateAllDir(DirectoryInfo source, string toPath, List<string>? ignoreList = null)
+        {
+            var dirs = source.GetDirectories();
+            if (dirs == null || dirs.Length == 0) return;
+            foreach (var item in dirs)
+            {
+                if (ignoreList != null && ignoreList.Contains(item.Name)) continue;
+                var newPath = Path.Combine(toPath, item.Name);
+                Directory.CreateDirectory(newPath);
+                var childDirs = Directory.GetDirectories(item.FullName);
+                if (childDirs != null && childDirs.Length > 0)
+                    CreateAllDir(item, toPath, ignoreList);
+            }
+        }
+
+        /// <summary>
+        /// 递归复制文件
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="toPath"></param>
+        /// <param name="ignoreList"></param>
+        private static void CopyAllFile(DirectoryInfo source, string toPath, List<string>? ignoreList = null)
+        {
+            //处理当前文件夹下的文件
+            var files = source.GetFiles();
+            if (files == null || files.Length == 0) return;
+            foreach (var item in files)
+            {
+                if (ignoreList != null && ignoreList.Contains(item.Name)) continue;
+                var toFile = Path.Combine(toPath, item.Name);
+                File.Copy(item.FullName, toFile);
+            }
+            //处理子目录
+            var childDirs = source.GetDirectories();
+            if (childDirs == null || childDirs.Length == 0) return;
+            foreach (var item in childDirs)
+            {
+                var childFiles = Directory.GetFiles(item.FullName);
+                if (childFiles != null && childFiles.Length > 0) CopyAllFile(item, toPath, ignoreList);
+            }
+        }
+        #endregion
     }
 }
