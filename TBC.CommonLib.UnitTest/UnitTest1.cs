@@ -8,7 +8,7 @@ namespace TBC.CommonLib.UnitTest
         {
             try
             {
-                var idcard = "530128".ToLong();
+                Tools.CopyTo("E:\\临时文件\\123", "E:\\临时文件\\321", [".vs",".git",".github"]);
             }
             catch (Exception e)
             {
