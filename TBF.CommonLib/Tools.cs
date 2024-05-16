@@ -661,7 +661,15 @@ namespace TBC.CommonLib
         /// <exception cref="Exception"></exception>
         public static string GetIPAddress(this HttpContext context)
         {
-            return (context.Connection.RemoteIpAddress?.ToString()) ?? throw new Exception("ip地址获取失败");
+            var ipAddress = context.Connection.RemoteIpAddress;
+            if (ipAddress != null)
+            {
+                if (ipAddress.IsIPv4MappedToIPv6)
+                {
+                    ipAddress = ipAddress.MapToIPv4();
+                }
+            }
+            return ipAddress?.ToString() ?? throw new Exception("ip地址获取失败");
         }
 
         /// <summary>
