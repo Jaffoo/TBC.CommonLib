@@ -514,7 +514,7 @@ namespace TBC.CommonLib
                 {
                     foreach (var item in headers)
                     {
-                        content.Headers.Add(item.Key, item.Value);
+                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                 }
                 HttpResponseMessage response = await _httpClient.PostAsync(url, content);
@@ -543,7 +543,7 @@ namespace TBC.CommonLib
                 {
                     foreach (var item in headers)
                     {
-                        content.Headers.Add(item.Key, item.Value);
+                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                 }
                 HttpResponseMessage response = await _httpClient.PostAsync(url, content);
