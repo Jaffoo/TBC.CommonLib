@@ -120,6 +120,24 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// int转Long
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static long ToLong(this int num)
+        {
+            try
+            {
+                return num;
+            }
+            catch
+            {
+                throw new Exception("转换失败");
+            }
+        }
+
+        /// <summary>
         /// 字符串转Long
         /// </summary>
         /// <param name="str">字符串</param>
@@ -434,7 +452,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static string ToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
+        public static string ListToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
         {
             try
             {
@@ -458,6 +476,25 @@ namespace TBC.CommonLib
             try
             {
                 var list = str.Split(splitCahr).Select(t => t.ToInt()).ToList();
+                return list ?? throw new Exception("转换失败");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("转换失败：" + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 字符串转list
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="splitCahr">分割符</param>
+        /// <returns></returns>
+        public static List<T> ToListInt<T>(this string str, char splitCahr = ',')
+        {
+            try
+            {
+                var list = str.Split(splitCahr).Select(t => (T)Convert.ChangeType(t.Trim(), typeof(T))).ToList();
                 return list ?? throw new Exception("转换失败");
             }
             catch (Exception e)
@@ -525,7 +562,7 @@ namespace TBC.CommonLib
                 throw;
             }
         }
-    
+
         /// <summary>
         /// 获取枚举描述
         /// </summary>
@@ -547,7 +584,7 @@ namespace TBC.CommonLib
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static T DeepClone<T>(this T value) where T: class
+        public static T DeepClone<T>(this T value) where T : class
         {
             try
             {
