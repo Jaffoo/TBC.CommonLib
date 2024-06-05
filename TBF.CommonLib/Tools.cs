@@ -442,7 +442,6 @@ namespace TBC.CommonLib
         #endregion
 
         #region 网络请求
-        private static readonly HttpClient _httpClient = new();
 
         /// <summary>
         /// get请求
@@ -454,14 +453,15 @@ namespace TBC.CommonLib
         {
             try
             {
+                HttpClient httpClient = new();
                 if (headers != null)
                 {
                     foreach (var item in headers)
                     {
-                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+                        httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                 }
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                HttpResponseMessage response = await httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }
@@ -480,14 +480,15 @@ namespace TBC.CommonLib
         {
             try
             {
+                HttpClient httpClient = new();
                 if (headers != null)
                 {
                     foreach (var item in headers)
                     {
-                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+                        httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                 }
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                HttpResponseMessage response = await httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 var res = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<T>(res) ?? throw new Exception("类型转换失败！");
@@ -509,15 +510,16 @@ namespace TBC.CommonLib
         {
             try
             {
+                HttpClient httpClient = new();
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                 if (headers != null)
                 {
                     foreach (var item in headers)
                     {
-                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+                        httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                 }
-                HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+                HttpResponseMessage response = await httpClient.PostAsync(url, content);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }
@@ -538,15 +540,16 @@ namespace TBC.CommonLib
         {
             try
             {
+                HttpClient httpClient = new();
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                 if (headers != null)
                 {
                     foreach (var item in headers)
                     {
-                        _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+                        httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
                     }
                 }
-                HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+                HttpResponseMessage response = await httpClient.PostAsync(url, content);
                 response.EnsureSuccessStatusCode();
                 var res = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<T>(res) ?? throw new Exception("类型转换失败！");

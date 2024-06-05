@@ -19,7 +19,7 @@ namespace TBC.CommonLib
         public static int ToInt(this string str)
         {
             var b = int.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转整数类型失败");
             return val;
         }
 
@@ -43,7 +43,7 @@ namespace TBC.CommonLib
         public static ushort ToUshort(this string str)
         {
             var b = ushort.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转无符号短整型类型失败");
             return val;
         }
 
@@ -67,7 +67,7 @@ namespace TBC.CommonLib
         public static short ToShort(this string str)
         {
             var b = short.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转短整型类型失败");
             return val;
         }
 
@@ -91,7 +91,7 @@ namespace TBC.CommonLib
         public static uint ToUint(this string str)
         {
             var b = uint.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转无符号整数类型失败");
             return val;
         }
 
@@ -115,7 +115,7 @@ namespace TBC.CommonLib
         public static long ToLong(this string str)
         {
             var b = long.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转长整数类型失败");
             return val;
         }
 
@@ -133,7 +133,7 @@ namespace TBC.CommonLib
             }
             catch
             {
-                throw new Exception("转换失败");
+                throw new Exception("整数类型转长整数类型失败");
             }
         }
 
@@ -157,7 +157,7 @@ namespace TBC.CommonLib
         public static ulong ToUlong(this string str)
         {
             var b = ulong.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转无符号长整数类型失败");
             return val;
         }
 
@@ -181,7 +181,7 @@ namespace TBC.CommonLib
         public static double ToDouble(this string str)
         {
             var b = double.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转双精度浮点数数据类型失败");
             return val;
         }
 
@@ -205,7 +205,7 @@ namespace TBC.CommonLib
         public static float ToFloat(this string str)
         {
             var b = float.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转单精度浮点数数据类型失败");
             return val;
         }
 
@@ -229,7 +229,7 @@ namespace TBC.CommonLib
         public static decimal ToDecimal(this string str)
         {
             var b = decimal.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转高精度小数的数据类型失败");
             return val;
         }
 
@@ -253,7 +253,7 @@ namespace TBC.CommonLib
         public static bool ToBool(this string str)
         {
             var b = bool.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转布尔类型失败");
             return val;
         }
 
@@ -277,7 +277,7 @@ namespace TBC.CommonLib
         public static DateTime ToDateTime(this string str)
         {
             var b = DateTime.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转时间类型失败");
             return val;
         }
 
@@ -301,7 +301,7 @@ namespace TBC.CommonLib
         public static byte ToByte(this string str)
         {
             var b = byte.TryParse(str, out var val);
-            if (!b) throw new Exception("转换失败");
+            if (!b) throw new Exception("字符串转byte类型失败");
             return val;
         }
 
@@ -324,7 +324,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static T ToEnum<T>(this string str) where T : struct
         {
-            if (!Enum.TryParse(str, out T result)) throw new Exception("转换失败");
+            if (!Enum.TryParse(str, out T result)) throw new Exception("字符串转枚举类型失败");
             return result;
         }
 
@@ -336,8 +336,9 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static T ToModel<T>(this string str) where T : class
         {
+            if (!str.IsValidJson()) throw new Exception("请传入json字符串");
             var res = JsonConvert.DeserializeObject<T>(str);
-            return res ?? throw new Exception("转换失败");
+            return res ?? throw new Exception("json字符串转对象失败");
         }
 
         /// <summary>
@@ -382,14 +383,8 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static JObject ToJObject(this string str)
         {
-            try
-            {
-                return JObject.Parse(str);
-            }
-            catch (JsonReaderException)
-            {
-                throw;
-            }
+            if (str.IsValidJson()) throw new Exception("非json字符串！");
+            return JObject.Parse(str);
         }
 
         /// <summary>
@@ -399,14 +394,8 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static JArray ToJArray(this string str)
         {
-            try
-            {
-                return JArray.Parse(str);
-            }
-            catch (JsonReaderException)
-            {
-                throw;
-            }
+            if (str.IsValidJson()) throw new Exception("非json字符串！");
+            return JArray.Parse(str);
         }
 
         /// <summary>
@@ -438,7 +427,7 @@ namespace TBC.CommonLib
             try
             {
                 var list = str.Split(splitCahr).ToList();
-                return list ?? throw new Exception("转换失败");
+                return list ?? throw new Exception("字符串转字符串列表失败");
             }
             catch (Exception e)
             {
@@ -457,7 +446,7 @@ namespace TBC.CommonLib
             try
             {
                 var str = string.Join(splitCahr, list);
-                return str ?? throw new Exception("转换失败");
+                return str ?? throw new Exception("列表转字符串失败");
             }
             catch (Exception e)
             {
@@ -476,7 +465,7 @@ namespace TBC.CommonLib
             try
             {
                 var list = str.Split(splitCahr).Select(t => t.ToInt()).ToList();
-                return list ?? throw new Exception("转换失败");
+                return list ?? throw new Exception("字符串转整数列表失败");
             }
             catch (Exception e)
             {
@@ -490,12 +479,12 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="splitCahr">分割符</param>
         /// <returns></returns>
-        public static List<T> ToListInt<T>(this string str, char splitCahr = ',')
+        public static List<T> ToListObj<T>(this string str, char splitCahr = ',')
         {
             try
             {
                 var list = str.Split(splitCahr).Select(t => (T)Convert.ChangeType(t.Trim(), typeof(T))).ToList();
-                return list ?? throw new Exception("转换失败");
+                return list ?? throw new Exception("字符串转列表失败");
             }
             catch (Exception e)
             {
@@ -514,7 +503,7 @@ namespace TBC.CommonLib
             try
             {
                 if (Enum.IsDefined(typeof(T), value)) return (T)(object)value;
-                throw new Exception("转换失败");
+                throw new Exception("整数类型转枚举失败");
             }
             catch (Exception)
             {
@@ -526,20 +515,20 @@ namespace TBC.CommonLib
         /// date转时间戳
         /// </summary>
         /// <param name="date">时间</param>
-        /// <param name="Millisecond">true:转毫秒级(默认),false:转秒级</param>
+        /// <param name="millisecond">true:转毫秒级(默认),false:转秒级</param>
         /// <returns></returns>
-        public static long ToTimeStamp(this DateTime date, bool Millisecond = true)
+        public static long ToTimeStamp(this DateTime date, bool millisecond = true)
         {
             try
             {
                 long timestamp;
-                if (Millisecond) timestamp = new DateTimeOffset(date).ToUnixTimeSeconds();
+                if (millisecond) timestamp = new DateTimeOffset(date).ToUnixTimeSeconds();
                 else timestamp = new DateTimeOffset(date).ToUnixTimeMilliseconds();
                 return timestamp;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new Exception("时间转换成时间戳失败，原因：" + e.Message);
             }
         }
 
@@ -557,9 +546,9 @@ namespace TBC.CommonLib
                 var jsonStr = JsonConvert.SerializeObject(value, format);
                 return jsonStr;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new Exception("未成功转为json字符串，原因：" + e.Message);
             }
         }
 
@@ -591,9 +580,9 @@ namespace TBC.CommonLib
                 var jsonStr = value.ToJsonStr();
                 return jsonStr.ToModel<T>();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new Exception("对象深克隆失败，原因：" + e.Message);
             }
         }
     }
