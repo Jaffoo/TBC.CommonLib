@@ -4,7 +4,8 @@
     {
         static async Task Main(string[] args)
         {
-            var res = await Tools.PostAsync("http://154.201.76.32:3000/get_friend_list","", new Dictionary<string, string>() { { "Authorization", "Bearer 5266" } });
+            string timespan = "1717753663";
+            var date = Tools.TimeStampToDate(timespan);
         }
     }
 }
