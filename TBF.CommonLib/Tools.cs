@@ -677,16 +677,17 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static string GetAbsoluteUri(this HttpRequest request)
+        public static string GetAbsoluteUri(this HttpRequest request, bool containQuery = true)
         {
-            return new StringBuilder()
+            var strB = new StringBuilder()
                 .Append(request.Scheme)
                 .Append("://")
                 .Append(request.Host)
                 .Append(request.PathBase)
-                .Append(request.Path)
-                .Append(request.QueryString)
-                .ToString();
+                .Append(request.Path);
+            if (containQuery)
+                strB.Append(request.QueryString);
+            return strB.ToString();
         }
 
         /// <summary>
@@ -694,13 +695,14 @@ namespace TBC.CommonLib
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static string GetRelativeUri(this HttpRequest request)
+        public static string GetRelativeUri(this HttpRequest request, bool containQuery = true)
         {
-            return new StringBuilder()
+            var strB = new StringBuilder()
                 .Append(request.PathBase)
-                .Append(request.Path)
-                .Append(request.QueryString)
-                .ToString();
+                .Append(request.Path);
+            if (containQuery)
+                strB.Append(request.QueryString);
+            return strB.ToString();
         }
         #endregion
 
