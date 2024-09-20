@@ -218,26 +218,13 @@ namespace TBC.CommonLib
             if (!long.TryParse(timeStamp, out long unixTimeStamp))
                 throw new ArgumentException("时间戳格式不正确");
 
-            DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            DateTime convertedTime;
-
-            if (timeStamp.Length == 10)
-                // 10 位时间戳
-                convertedTime = origin.AddSeconds(timeStamp.ToLong());
-            else if (timeStamp.Length == 13)
-                // 13 位时间戳
-                convertedTime = origin.AddMilliseconds(timeStamp.ToLong());
-            else
-                throw new ArgumentException("时间戳格式错误");
-
-            return convertedTime.ToLocalTime(); // 转换为本地时间
+            return TimeStampToDate(unixTimeStamp);
         }
 
         /// <summary>
         /// 时间戳转时间
         /// </summary>
         /// <param name="timeStamp">时间戳</param>
-        /// <param name="num">时间戳位数</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         public static DateTime TimeStampToDate(long timeStamp)

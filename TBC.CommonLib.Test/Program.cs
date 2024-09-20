@@ -2,10 +2,11 @@
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main()
         {
-            string timespan = "1717753663";
-            var date = Tools.TimeStampToDate(timespan);
+            List<string>? list = null;
+            var a = list.ListToStr();
+            Console.ReadKey();
         }
     }
 }
