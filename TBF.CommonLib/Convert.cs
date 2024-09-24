@@ -375,7 +375,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static JObject ToJObject(this string str)
         {
-            if (str.IsValidJson()) throw new Exception("非json字符串！");
+            if (!str.IsValidJson()) throw new Exception("非json字符串！");
             return JObject.Parse(str);
         }
 
