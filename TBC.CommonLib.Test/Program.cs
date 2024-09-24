@@ -4,8 +4,8 @@
     {
         static void Main()
         {
-            List<string>? list = null;
-            var a = list.ListToStr();
+            string? a = null;
+            var b = a.ToLong(0);
             Console.ReadKey();
         }
     }

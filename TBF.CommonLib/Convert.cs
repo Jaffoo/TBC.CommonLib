@@ -30,7 +30,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static int ToInt(this string str, int defaultVal)
+        public static int ToInt(this string? str, int defaultVal)
         {
             return int.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -54,7 +54,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static ushort ToUshort(this string str, ushort defaultVal)
+        public static ushort ToUshort(this string? str, ushort defaultVal)
         {
             return ushort.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -78,7 +78,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static short ToShort(this string str, short defaultVal)
+        public static short ToShort(this string? str, short defaultVal)
         {
             return short.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -102,7 +102,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static uint ToUint(this string str, uint defaultVal)
+        public static uint ToUint(this string? str, uint defaultVal)
         {
             return uint.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -127,7 +127,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static long ToLong(this string str, long defaultVal)
+        public static long ToLong(this string? str, long defaultVal)
         {
             return long.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -151,7 +151,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static ulong ToUlong(this string str, ulong defaultVal)
+        public static ulong ToUlong(this string? str, ulong defaultVal)
         {
             return ulong.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -175,7 +175,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static double ToDouble(this string str, double defaultVal)
+        public static double ToDouble(this string? str, double defaultVal)
         {
             return double.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -199,7 +199,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static float ToFloat(this string str, float defaultVal)
+        public static float ToFloat(this string? str, float defaultVal)
         {
             return float.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -223,7 +223,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static decimal ToDecimal(this string str, decimal defaultVal)
+        public static decimal ToDecimal(this string? str, decimal defaultVal)
         {
             return decimal.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -247,7 +247,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static bool ToBool(this string str, bool defaultVal = false)
+        public static bool ToBool(this string? str, bool defaultVal)
         {
             return bool.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -271,7 +271,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static DateTime ToDateTime(this string str, DateTime defaultVal)
+        public static DateTime ToDateTime(this string? str, DateTime defaultVal)
         {
             return DateTime.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -295,7 +295,7 @@ namespace TBC.CommonLib
         /// <param name="str">字符串</param>
         /// <param name="defaultVal">转换失败后默认值</param>
         /// <returns></returns>
-        public static byte ToByte(this string str, byte defaultVal)
+        public static byte ToByte(this string? str, byte defaultVal)
         {
             return byte.TryParse(str, out var val) ? val : defaultVal;
         }
@@ -326,49 +326,6 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
-        /// 获取json字符串的键的值
-        /// </summary>
-        /// <param name="str">json字符串</param>
-        /// <param name="key">键</param>
-        /// <returns></returns>
-        public static string Fetch(this string str, string key)
-        {
-            if (!str.IsValidJson())
-                throw new ArgumentException("Invalid JSON string.");
-
-            var keys = key.Split(':');
-            JObject jsonObject = JObject.Parse(str);
-
-            JToken? token = jsonObject;
-            foreach (var k in keys)
-            {
-                token = token[k];
-                if (token == null) throw new KeyNotFoundException($"Key '{k}' not found in JSON.");
-            }
-
-            return token.ToString();
-        }
-
-        /// <summary>
-        /// 获取json字符串的键的值
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="str">json字符串</param>
-        /// <param name="key">键</param>
-        /// <returns></returns>
-        public static T Fetch<T>(this string str, string key)
-        {
-            if (str.IsValidJson())
-            {
-                var res = JObject.Parse(str);
-                var val = res[key] ?? throw new Exception("键不存在！");
-                var fin = val.ToObject<T>();
-                return fin == null ? throw new Exception("类型转换失败！") : fin;
-            }
-            throw new Exception("非json字符串！");
-        }
-
-        /// <summary>
         /// 字符串转JObject
         /// </summary>
         /// <param name="str">json字符串</param>
@@ -388,24 +345,6 @@ namespace TBC.CommonLib
         {
             if (str.IsValidJson()) throw new Exception("非json字符串！");
             return JArray.Parse(str);
-        }
-
-        /// <summary>
-        /// 是否是json字符串
-        /// </summary>
-        /// <param name="jsonString"></param>
-        /// <returns></returns>
-        public static bool IsValidJson(this string jsonString)
-        {
-            try
-            {
-                _ = JsonConvert.DeserializeObject(jsonString);
-                return true;
-            }
-            catch (JsonReaderException)
-            {
-                return false;
-            }
         }
 
         /// <summary>
@@ -529,33 +468,6 @@ namespace TBC.CommonLib
         {
             var jsonStr = JsonConvert.SerializeObject(value, format);
             return jsonStr;
-        }
-
-        /// <summary>
-        /// 获取枚举描述
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string GetDescription<T>(this T value) where T : Enum
-        {
-            Type type = typeof(T);
-            string name = Enum.GetName(type, value)!;
-            MemberInfo member = type.GetMember(name)[0];
-            DescriptionAttribute? attribute = member.GetCustomAttribute<DescriptionAttribute>();
-            return attribute != null ? attribute.Description : name;
-        }
-
-        /// <summary>
-        /// 深拷贝
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static T DeepClone<T>(this T value) where T : class
-        {
-            var jsonStr = value.ToJsonStr();
-            return jsonStr.ToModel<T>();
         }
     }
 }
