@@ -355,7 +355,8 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<string> ToListStr(this string str, char splitCahr = ',')
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(nameof(str));
+            ArgumentNullException.ThrowIfNull(str);
+            if (str.IsNullOrWhiteSpace()) return [];
             var list = str.Split(splitCahr).ToList();
             return list ?? throw new Exception("转换结果为空");
         }
