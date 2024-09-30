@@ -41,14 +41,27 @@ public static class Extension
     /// <returns></returns>
     public static T Fetch<T>(this string str, string key)
     {
-        if (str.IsValidJson())
+        try
         {
-            var res = JObject.Parse(str);
-            var val = res[key] ?? throw new Exception("键不存在！");
-            var fin = val.ToObject<T>();
-            return fin == null ? throw new Exception("类型转换失败！") : fin;
+            if (!str.IsValidJson())
+                throw new ArgumentException("Invalid JSON string.");
+
+            var keys = key.Split(':');
+            JObject jsonObject = JObject.Parse(str);
+
+            JToken? token = jsonObject;
+            foreach (var k in keys)
+            {
+                token = token[k];
+                if (token == null) throw new KeyNotFoundException($"Key '{k}' not found in JSON.");
+            }
+            var fin = token.ToObject<T>() ?? throw new InvalidDataException("转换失败！");
+            return fin;
         }
-        throw new Exception("非json字符串！");
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     /// <summary>
