@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Version>1.2.0</Version>
+    <Company>none</Company>
+    <PackageProjectUrl>https://github.com/Jaffoo/TBC.CommonLib</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Jaffoo/TBC.CommonLib</RepositoryUrl>
+    <PackageReleaseNotes>降低依赖.net 8 -&gt; .net standerd2.1</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt" Link="LICENSE.txt">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\README.md" Link="README.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

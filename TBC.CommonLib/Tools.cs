@@ -4,6 +4,12 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace TBC.CommonLib
 {
@@ -229,7 +235,7 @@ namespace TBC.CommonLib
         /// <exception cref="ArgumentException"></exception>
         public static DateTime TimeStampToDate(long timeStamp)
         {
-            DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             DateTime convertedTime;
 
             if (timeStamp.ToString().Length == 10)
@@ -288,7 +294,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<DateTime> ThisWeek(DateTime date, string order = "asc")
         {
-            List<DateTime> weekDates = new();
+            List<DateTime> weekDates = new List<DateTime>();
             DateTime startDate = date.Date.AddDays(-(int)date.DayOfWeek);
             for (int i = 0; i < 7; i++)
             {
@@ -305,7 +311,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<DateTime> RecentSevenDays(DateTime date, string order = "asc")
         {
-            List<DateTime> recentDates = new();
+            List<DateTime> recentDates = new List<DateTime>();
             for (int i = 0; i < 7; i++)
             {
                 recentDates.Add(date.Date.AddDays(-i));
@@ -322,7 +328,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<DateTime> ThisMonth(DateTime date, string order = "asc")
         {
-            List<DateTime> monthDates = new();
+            List<DateTime> monthDates = new List<DateTime>();
             var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
             for (int i = 1; i <= daysInMonth; i++)
             {
@@ -386,14 +392,14 @@ namespace TBC.CommonLib
         /// <param name="obj">反射对象</param>
         /// <param name="propertyName">字段名称</param>
         /// <returns></returns>
-        public static T? GetPropValue<T>(object obj, string propertyName)
+        public static T GetPropValue<T>(object obj, string propertyName)
         {
             try
             {
                 if (obj == null) throw new ArgumentNullException(nameof(obj));
                 Type type = obj.GetType();
                 PropertyInfo propertyInfo = type.GetProperty(propertyName) ?? throw new Exception("类中属性不存在");
-                var res = (T?)propertyInfo.GetValue(obj);
+                var res = (T)propertyInfo.GetValue(obj);
                 return res;
             }
             catch (Exception)
@@ -437,7 +443,7 @@ namespace TBC.CommonLib
         {
             try
             {
-                HttpClient httpClient = new();
+                HttpClient httpClient = new HttpClient();
                 if (headers != null)
                 {
                     foreach (var item in headers)
@@ -464,7 +470,7 @@ namespace TBC.CommonLib
         {
             try
             {
-                HttpClient httpClient = new();
+                HttpClient httpClient = new HttpClient();
                 if (headers != null)
                 {
                     foreach (var item in headers)
@@ -494,7 +500,7 @@ namespace TBC.CommonLib
         {
             try
             {
-                HttpClient httpClient = new();
+                HttpClient httpClient = new HttpClient();
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                 if (headers != null)
                 {
@@ -524,7 +530,7 @@ namespace TBC.CommonLib
         {
             try
             {
-                HttpClient httpClient = new();
+                HttpClient httpClient = new HttpClient();
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                 if (headers != null)
                 {
@@ -553,14 +559,19 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static string MD5Encrypt(string str)
         {
-            string result = "";
-            var buffer = Encoding.UTF8.GetBytes(str);
-            var md5 = MD5.HashData(buffer);
-            foreach (var item in md5)
+            // 创建 MD5 实例
+            using MD5 md5 = MD5.Create();
+            // 将输入字符串转换为字节数组并计算哈希
+            byte[] inputBytes = Encoding.UTF8.GetBytes(str);
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+            // 将哈希字节数组转换为十六进制字符串
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hashBytes)
             {
-                result += item.ToString("x2");
+                sb.Append(b.ToString("x2")); // 将字节转换为十六进制字符串
             }
-            return result;
+            return sb.ToString();
         }
         #endregion
 
@@ -580,9 +591,9 @@ namespace TBC.CommonLib
 
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
-            using MemoryStream msEncrypt = new();
-            using CryptoStream csEncrypt = new(msEncrypt, encryptor, CryptoStreamMode.Write);
-            using (StreamWriter swEncrypt = new(csEncrypt))
+            using MemoryStream msEncrypt = new MemoryStream();
+            using CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
             {
                 swEncrypt.Write(plainText);
             }
@@ -604,9 +615,9 @@ namespace TBC.CommonLib
 
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
-            using MemoryStream msDecrypt = new(cipherText);
-            using CryptoStream csDecrypt = new(msDecrypt, decryptor, CryptoStreamMode.Read);
-            using StreamReader srDecrypt = new(csDecrypt);
+            using MemoryStream msDecrypt = new MemoryStream(cipherText);
+            using CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+            using StreamReader srDecrypt = new StreamReader(csDecrypt);
             return srDecrypt.ReadToEnd();
         }
         #endregion
@@ -620,7 +631,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static byte[] Encrypt(string plainText, RSAParameters publicKey)
         {
-            using RSACryptoServiceProvider rsa = new();
+            using RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             rsa.ImportParameters(publicKey);
             return rsa.Encrypt(Encoding.UTF8.GetBytes(plainText), true);
         }
@@ -633,7 +644,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static string Decrypt(byte[] cipherText, RSAParameters privateKey)
         {
-            using RSACryptoServiceProvider rsa = new();
+            using RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             rsa.ImportParameters(privateKey);
             return Encoding.UTF8.GetString(rsa.Decrypt(cipherText, true));
         }

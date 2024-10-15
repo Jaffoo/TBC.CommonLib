@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.ComponentModel;
-using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TBC.CommonLib
 {
@@ -355,8 +356,8 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<string> ToListStr(this string str, char splitCahr = ',')
         {
-            ArgumentNullException.ThrowIfNull(str);
-            if (str.IsNullOrWhiteSpace()) return [];
+            if (str.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(str));
+            if (str.IsNullOrWhiteSpace()) return new List<string>();
             var list = str.Split(splitCahr).ToList();
             return list ?? throw new Exception("转换结果为空");
         }
@@ -369,7 +370,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<int> ToListInt(this string str, char splitCahr = ',')
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(nameof(str));
+            if (str.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(str));
             var list = str.Split(splitCahr).Select(t => t.ToInt()).ToList();
             return list ?? throw new Exception("转换结果为空");
         }
@@ -382,7 +383,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static List<T> ToListObj<T>(this string str, char splitCahr = ',')
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(nameof(str));
+            if (str.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(str));
             var list = str.Split(splitCahr).Select(t => (T)Convert.ChangeType(t.Trim(), typeof(T))).ToList();
             return list ?? throw new Exception("字符串转列表失败");
         }
@@ -415,7 +416,7 @@ namespace TBC.CommonLib
         /// <returns></returns>
         public static string ListToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
         {
-            ArgumentNullException.ThrowIfNull(list);
+            if (list == null) throw new ArgumentNullException(nameof(list));
             var str = string.Join(splitCahr, list);
             return str ?? throw new Exception("转换结果为空");
         }
