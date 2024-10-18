@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace TBC.CommonLib
 {
@@ -346,7 +347,7 @@ namespace TBC.CommonLib
         /// <typeparam name="T"></typeparam>
         /// <param name="namespace"></param>
         /// <returns></returns>
-        public static IEnumerable<T> CreateInstances<T>(string @namespace) where T : class
+        public static IEnumerable<T> GetInstances<T>(string @namespace) where T : class
         {
             var list = Assembly
             .GetExecutingAssembly()
@@ -419,10 +420,48 @@ namespace TBC.CommonLib
             try
             {
                 if (obj == null) throw new ArgumentNullException(nameof(obj));
+                if (propertyName.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(propertyName));
                 Type type = obj.GetType();
-                PropertyInfo propertyInfo = type.GetProperty(propertyName) ?? throw new Exception("类中属性不存在");
+                PropertyInfo propertyInfo = type.GetProperty(propertyName) ?? throw new Exception("类中不存在" + propertyName);
                 var res = propertyInfo.GetValue(obj);
                 return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 设置字段值
+        /// </summary>
+        /// <param name="obj">反射对象</param>
+        /// <param name="propertyName">字段名称</param>
+        /// <param name="value">值</param>
+        /// <returns></returns>
+        public static void SetPropValue(object obj, string propertyName, object value)
+        {
+            try
+            {
+                if (obj == null) throw new ArgumentNullException(nameof(obj));
+                if (propertyName.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(propertyName));
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                // 获取对象的类型
+                var type = obj.GetType();
+
+                // 获取指定名称的属性
+                var propertyInfo = type.GetProperty(propertyName);
+
+                // 检查属性是否存在且可写
+                if (propertyInfo != null && propertyInfo.CanWrite)
+                {
+                    // 设置属性值
+                    propertyInfo.SetValue(obj, value);
+                }
+                else
+                {
+                    throw new ArgumentException($"属性'{propertyName}'不存在或者不可写入");
+                }
             }
             catch (Exception)
             {
@@ -782,6 +821,92 @@ namespace TBC.CommonLib
                     var copyFile = Path.Combine(toPath, file.Name);
                     File.Copy(file.FullName, copyFile);
                 }
+        }
+        #endregion
+
+        #region 文件操作
+        /// <summary>
+        /// 写入内容
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="text">文本</param>
+        public static void WriteText(string path, string text)
+        {
+            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine(text);
+            sw.Flush();
+        }
+
+        /// <summary>
+        /// 追加文本
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="text">文本</param>
+        public static void ApendText(string path, string text)
+        {
+            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine(text);
+            sw.Flush();
+        }
+
+        /// <summary>
+        /// 写入行
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="line">文本</param>
+        public static void WriteLine(string path, string line)
+        {
+            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine(line);
+            sw.Flush();
+        }
+
+        /// <summary>
+        /// 追加行
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="line">文本</param>
+        public static void AppendLine(string path, string line)
+        {
+            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine(line);
+            sw.Flush();
+        }
+
+        /// <summary>
+        /// 写入多行
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="lines">文本</param>
+        public static void WriteLines(string path, IEnumerable<string> lines)
+        {
+            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new StreamWriter(fs);
+            foreach (var line in lines)
+            {
+                sw.WriteLine(line);
+                sw.Flush();
+            }
+        }
+
+        /// <summary>
+        /// 追加多行
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="lines">文本</param>
+        public static void AppendLines(string path, IEnumerable<string> lines)
+        {
+            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new StreamWriter(fs);
+            foreach (var line in lines)
+            {
+                sw.WriteLine(line);
+                sw.Flush();
+            }
         }
         #endregion
     }

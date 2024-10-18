@@ -22,7 +22,7 @@ namespace TBC.CommonLib
         public static string Fetch(this string str, string key)
         {
             if (!str.IsValidJson())
-                throw new ArgumentException("Invalid JSON string.");
+                throw new ArgumentException("无效的JSON字符串。");
 
             var keys = key.Split(':');
             JObject jsonObject = JObject.Parse(str);
@@ -31,7 +31,7 @@ namespace TBC.CommonLib
             foreach (var k in keys)
             {
                 token = token[k];
-                if (token == null) throw new KeyNotFoundException($"Key '{k}' not found in JSON.");
+                if (token == null) throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
             }
 
             return token.ToString();
@@ -49,7 +49,7 @@ namespace TBC.CommonLib
             try
             {
                 if (!str.IsValidJson())
-                    throw new ArgumentException("Invalid JSON string.");
+                    throw new ArgumentException("无效的JSON字符串。");
 
                 var keys = key.Split(':');
                 JObject jsonObject = JObject.Parse(str);
@@ -58,7 +58,7 @@ namespace TBC.CommonLib
                 foreach (var k in keys)
                 {
                     token = token[k];
-                    if (token == null) throw new KeyNotFoundException($"Key '{k}' not found in JSON.");
+                    if (token == null) throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
                 }
                 var fin = token.ToObject<T>() ?? throw new InvalidDataException("转换失败！");
                 return fin;
