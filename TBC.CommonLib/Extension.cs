@@ -24,17 +24,28 @@ namespace TBC.CommonLib
             if (!str.IsValidJson())
                 throw new ArgumentException("无效的JSON字符串。");
 
-            var keys = key.Split(':');
+            var keys = key.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
+            var results = "";
+
             JObject jsonObject = JObject.Parse(str);
 
-            JToken? token = jsonObject;
             foreach (var k in keys)
             {
-                token = token[k];
-                if (token == null) throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
+                var nestedKeys = k.Split(':');
+                JToken? token = jsonObject;
+
+                foreach (var nestedKey in nestedKeys)
+                {
+                    token = token?[nestedKey];
+                    if (token == null)
+                    {
+                        throw new KeyNotFoundException($"JSON字符串中找不到键值'{k}'。");
+                    }
+                }
+                results += token.ToString();
             }
 
-            return token.ToString();
+            return results;
         }
 
         /// <summary>
