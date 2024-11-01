@@ -17,36 +17,36 @@ namespace TBC.CommonLib
         /// 获取json字符串的键的值
         /// </summary>
         /// <param name="str">json字符串</param>
-        /// <param name="key">键</param>
+        /// <param name="keys">键</param>
         /// <returns></returns>
-        public static string Fetch(this string str, string key)
+        public static string Fetch(this string str, params string[] keys)
         {
             if (!str.IsValidJson())
                 throw new ArgumentException("无效的JSON字符串。");
 
-            var keys = key.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
-            var results = "";
-
             JObject jsonObject = JObject.Parse(str);
+            var results = new List<string>();
 
-            foreach (var k in keys)
+            foreach (var key in keys)
             {
-                var nestedKeys = k.Split(':');
+                var list = key.Split(':');
                 JToken? token = jsonObject;
-
-                foreach (var nestedKey in nestedKeys)
+                foreach (var l in list)
                 {
-                    token = token?[nestedKey];
-                    if (token == null)
-                    {
-                        throw new KeyNotFoundException($"JSON字符串中找不到键值'{k}'。");
-                    }
+                    token = token[l];
+                    if (token == null) throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
                 }
-                results += token.ToString();
+                if (token == null)
+                {
+                    throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
+                }
+
+                results.Add(token.ToString());
             }
 
-            return results;
+            return string.Concat(results); // 直接拼接结果
         }
+
 
         /// <summary>
         /// 获取json字符串的键的值
@@ -55,29 +55,31 @@ namespace TBC.CommonLib
         /// <param name="str">json字符串</param>
         /// <param name="key">键</param>
         /// <returns></returns>
-        public static T Fetch<T>(this string str, string key)
+        public static T Fetch<T>(this string str, params string[] keys)
         {
-            try
+            if (!str.IsValidJson())
+                throw new ArgumentException("无效的JSON字符串。");
+
+            JObject jsonObject = JObject.Parse(str);
+            var results = new List<string>();
+
+            foreach (var key in keys)
             {
-                if (!str.IsValidJson())
-                    throw new ArgumentException("无效的JSON字符串。");
-
-                var keys = key.Split(':');
-                JObject jsonObject = JObject.Parse(str);
-
+                var list = key.Split(':');
                 JToken? token = jsonObject;
-                foreach (var k in keys)
+                foreach (var l in list)
                 {
-                    token = token[k];
+                    token = token[l];
                     if (token == null) throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
                 }
-                var fin = token.ToObject<T>() ?? throw new InvalidDataException("转换失败！");
-                return fin;
+                if (token == null)
+                {
+                    throw new KeyNotFoundException($"JSON字符串中找不到键值'{key}'。");
+                }
+
+                results.Add(token.ToString());
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            return (T)Convert.ChangeType(string.Concat(results), typeof(T));
         }
 
         /// <summary>
