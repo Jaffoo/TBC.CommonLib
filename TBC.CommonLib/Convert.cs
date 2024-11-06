@@ -11,7 +11,7 @@ namespace TBC.CommonLib
     /// </summary>
     public static class Converts
     {
-        #region 字符串转其他
+        #region 字符串转
         /// <summary>
         /// 字符串转int
         /// </summary>
@@ -120,7 +120,6 @@ namespace TBC.CommonLib
             if (!b) throw new Exception("字符串转长整数类型失败");
             return val;
         }
-        #endregion
 
         /// <summary>
         /// 字符串转Long
@@ -387,11 +386,13 @@ namespace TBC.CommonLib
             var list = str.Split(splitCahr).Select(t => (T)Convert.ChangeType(t.Trim(), typeof(T))).ToList();
             return list ?? throw new Exception("字符串转列表失败");
         }
+        #endregion
 
+        #region int转
         /// <summary>
         /// int转Long
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="num"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static long ToLong(this int num) => num;
@@ -399,26 +400,13 @@ namespace TBC.CommonLib
         /// <summary>
         /// int转Long
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="num"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static long ToLong(this int? num, long defaultVal = 0)
         {
             if (!num.HasValue) return defaultVal;
             return num.Value;
-        }
-
-        /// <summary>
-        /// list转字符串
-        /// </summary>
-        /// <param name="list">列表</param>
-        /// <param name="splitCahr">分割符</param>
-        /// <returns></returns>
-        public static string ListToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
-        {
-            if (list == null) throw new ArgumentNullException(nameof(list));
-            var str = string.Join(splitCahr, list);
-            return str ?? throw new Exception("转换结果为空");
         }
 
         /// <summary>
@@ -433,6 +421,65 @@ namespace TBC.CommonLib
             throw new Exception("整数类型转枚举失败");
         }
 
+        /// <summary>
+        /// int转double
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static double ToDouble(this int num) => num;
+
+        /// <summary>
+        /// int转double
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static double ToDouble(this int? num, double defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return num.Value;
+        }
+
+        /// <summary>
+        /// int转float
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static float ToFloat(this int num) => num;
+
+        /// <summary>
+        /// int转float
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static float ToFloat(this int? num, float defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return num.Value;
+        }
+
+        /// <summary>
+        /// int转decimal
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this int num) => num;
+
+        /// <summary>
+        /// int转decimal
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this int? num, decimal defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return num.Value;
+        }
+        #endregion
+
+        #region date转
         /// <summary>
         /// date转时间戳
         /// </summary>
@@ -458,6 +505,227 @@ namespace TBC.CommonLib
             if (!date.HasValue) throw new ArgumentNullException(nameof(date));
             return ToTimeStamp(date.Value, millisecond);
         }
+        #endregion
+
+        #region Double转
+        /// <summary>
+        /// 转int，四舍五入
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static int ToInt(this double num)
+        {
+            return (int)Math.Round(num);
+        }
+
+        /// <summary>
+        /// 转int，四舍五入
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static int ToInt(this double? num, int defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return (int)Math.Round(num.Value);
+        }
+
+        /// <summary>
+        /// 转int，向上取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static int ToCeilInt(this double num)
+        {
+            return (int)Math.Ceiling(num);
+        }
+
+        /// <summary>
+        /// 转int，向上取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static int ToCeilInt(this double? num, int defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return (int)Math.Ceiling(num.Value);
+        }
+
+        /// <summary>
+        /// 转int，向下取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static int ToFloorInt(this double num)
+        {
+            return (int)Math.Floor(num);
+        }
+
+        /// <summary>
+        /// 转int，向下取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static int ToFloorInt(this double? num, int defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return (int)Math.Floor(num.Value);
+        }
+
+        /// <summary>
+        /// 转金额
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this double num)
+        {
+            return Convert.ToDecimal(num);
+        }
+
+        /// <summary>
+        /// 转金额
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this double? num, decimal defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return Convert.ToDecimal(num);
+        }
+        #endregion
+
+        #region Float转
+        /// <summary>
+        /// 转int，四舍五入
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static int ToInt(this float num)
+        {
+            return (int)Math.Round(num);
+        }
+
+        /// <summary>
+        /// 转int，四舍五入
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static int ToInt(this float? num, int defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return (int)Math.Round(num.Value);
+        }
+
+        /// <summary>
+        /// 转int，向上取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static int ToCeilInt(this float num)
+        {
+            return (int)Math.Ceiling(num);
+        }
+
+        /// <summary>
+        /// 转int，向上取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static int ToCeilInt(this float? num, int defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return (int)Math.Ceiling(num.Value);
+        }
+
+        /// <summary>
+        /// 转int，向下取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static int ToFloorInt(this float num)
+        {
+            return (int)Math.Floor(num);
+        }
+
+        /// <summary>
+        /// 转int，向下取整
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static int ToFloorInt(this float? num, int defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return (int)Math.Floor(num.Value);
+        }
+
+        /// <summary>
+        /// 转金额
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this float num)
+        {
+            return Convert.ToDecimal(num);
+        }
+
+        /// <summary>
+        /// 转金额
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this float? num, decimal defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return Convert.ToDecimal(num);
+        }
+        #endregion
+
+        #region decimal转
+        /// <summary>
+        /// decimal转double
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static double ToDouble(this decimal num) => Convert.ToDouble(num);
+
+        /// <summary>
+        /// decimal转double
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static double ToDouble(this decimal? num, double defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return Convert.ToDouble(num.Value);
+        }
+
+        /// <summary>
+        /// decimal转float
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static float ToFloat(this decimal num) => Convert.ToSingle(num);
+
+        /// <summary>
+        /// decimal转float
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static float ToFloat(this decimal? num, float defaultVal)
+        {
+            if (!num.HasValue) return defaultVal;
+            return Convert.ToSingle(num.Value);
+        }
+        #endregion
 
         /// <summary>
         /// 类转json字符串
@@ -470,6 +738,19 @@ namespace TBC.CommonLib
         {
             var jsonStr = JsonConvert.SerializeObject(value, format);
             return jsonStr;
+        }
+
+        /// <summary>
+        /// list转字符串
+        /// </summary>
+        /// <param name="list">列表</param>
+        /// <param name="splitCahr">分割符</param>
+        /// <returns></returns>
+        public static string ListToStr<T>(this IEnumerable<T> list, char splitCahr = ',')
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            var str = string.Join(splitCahr, list);
+            return str ?? throw new Exception("转换结果为空");
         }
     }
 }
