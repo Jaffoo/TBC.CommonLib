@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Company>none</Company>
     <PackageProjectUrl>https://github.com/Jaffoo/TBC.CommonLib</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
