@@ -967,25 +967,12 @@ namespace TBC.CommonLib
         /// <param name="anyKey">任意键退出</param>
         /// <param name="tips">提示内容</param>
         /// <returns></returns>
-        public static void ConsoleExit(bool anyKey, string tips)
-        {
-            if (anyKey)
-            {
-                if (!tips.IsNullOrWhiteSpace()) Console.Write(tips);
-                Console.ReadKey(); // 等待用户按下任意键
-            }
-            // 退出程序
-            Environment.Exit(0);
-        }
-
-        /// <summary>
-        /// 控制台等待退出
-        /// </summary>
-        /// <param name="tips">提示内容</param>
-        /// <returns></returns>
         public static void ConsoleExit(string tips = "按任意键退出")
         {
-            ConsoleExit(true, tips);
+            if (!tips.IsNullOrWhiteSpace()) Console.Write(tips);
+            Console.ReadKey(); // 等待用户按下任意键
+            // 退出程序
+            Environment.Exit(0);
         }
         #endregion
     }
