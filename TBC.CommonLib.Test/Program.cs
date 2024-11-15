@@ -4,12 +4,10 @@
     {
         static void Main()
         {
-            string a = "{'a':'1','b':'2','c':{'c1':'3'},'d':'4','e':{'e1':'5'},'f':'6'}";
-            Console.WriteLine(a.Fetch("a"));
-            Console.WriteLine(a.Fetch("a", "b"));
-            Console.WriteLine(a.Fetch("c:c1"));
-            Console.WriteLine(a.Fetch("c:c1", "e:e1", "f"));
-            Console.ReadKey();
+            Console.Write("请输入：");
+            var input = Tools.ConsoleReadLine("输入为空，请重新输入：");
+            Console.WriteLine("你输入的内容是:" + input);
+            Tools.ConsoleExit();
         }
     }
 }

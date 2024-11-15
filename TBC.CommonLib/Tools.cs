@@ -909,5 +909,84 @@ namespace TBC.CommonLib
             }
         }
         #endregion
+
+        #region 控制台输入
+        /// <summary>
+        /// 控制台输入一个字符
+        /// </summary>
+        /// <param name="mustInput"></param>
+        /// <returns></returns>
+        public static string ConsoleRead(bool mustInput = true)
+        {
+            StringBuilder characters = new StringBuilder();
+            int input;
+            do
+            {
+                input = Console.Read();
+                if (input != -1) characters.Append((char)input);
+            }
+            while (mustInput && input == -1);
+
+            return characters.ToString();
+        }
+
+        /// <summary>
+        /// 控制台输入字符串
+        /// </summary>
+        /// <param name="mustInput">是否必须输入</param>
+        /// <param name="msg">为输入提示文字</param>
+        /// <param name="msgLineFeed">提示文字是否换行输出</param>
+        /// <returns></returns>
+        public static string ConsoleReadLine(bool mustInput, string msg, bool msgLineFeed)
+        {
+            string input;
+            do
+            {
+                input = Console.ReadLine();
+                if (mustInput && input.IsNullOrWhiteSpace() && !msg.IsNullOrWhiteSpace())
+                    if (msgLineFeed) Console.WriteLine(msg);
+                    else Console.Write(msg);
+            } while (mustInput && string.IsNullOrWhiteSpace(input));
+            return input;
+        }
+
+        /// <summary>
+        /// 控制台输入字符串
+        /// </summary>
+        /// <param name="msg">为输入提示文字</param>
+        /// <param name="msgLineFeed">提示文字是否换行输出</param>
+        /// <returns></returns>
+        public static string ConsoleReadLine(string msg = "", bool msgLineFeed = false)
+        {
+            return ConsoleReadLine(true, msg, msgLineFeed);
+        }
+
+        /// <summary>
+        /// 控制台退出
+        /// </summary>
+        /// <param name="anyKey">任意键退出</param>
+        /// <param name="tips">提示内容</param>
+        /// <returns></returns>
+        public static void ConsoleExit(bool anyKey, string tips)
+        {
+            if (anyKey)
+            {
+                if (!tips.IsNullOrWhiteSpace()) Console.Write(tips);
+                Console.ReadKey(); // 等待用户按下任意键
+            }
+            // 退出程序
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// 控制台等待退出
+        /// </summary>
+        /// <param name="tips">提示内容</param>
+        /// <returns></returns>
+        public static void ConsoleExit(string tips = "按任意键退出")
+        {
+            ConsoleExit(true, tips);
+        }
+        #endregion
     }
 }
