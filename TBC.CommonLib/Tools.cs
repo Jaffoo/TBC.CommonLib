@@ -832,10 +832,9 @@ namespace TBC.CommonLib
         /// <param name="text">文本</param>
         public static void WriteText(string path, string text)
         {
-            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
             using StreamWriter sw = new StreamWriter(fs);
             sw.WriteLine(text);
-            sw.Flush();
         }
 
         /// <summary>
@@ -845,36 +844,9 @@ namespace TBC.CommonLib
         /// <param name="text">文本</param>
         public static void ApendText(string path, string text)
         {
-            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None);
             using StreamWriter sw = new StreamWriter(fs);
             sw.WriteLine(text);
-            sw.Flush();
-        }
-
-        /// <summary>
-        /// 写入行
-        /// </summary>
-        /// <param name="path">文件路径</param>
-        /// <param name="line">文本</param>
-        public static void WriteLine(string path, string line)
-        {
-            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine(line);
-            sw.Flush();
-        }
-
-        /// <summary>
-        /// 追加行
-        /// </summary>
-        /// <param name="path">文件路径</param>
-        /// <param name="line">文本</param>
-        public static void AppendLine(string path, string line)
-        {
-            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine(line);
-            sw.Flush();
         }
 
         /// <summary>
@@ -884,12 +856,11 @@ namespace TBC.CommonLib
         /// <param name="lines">文本</param>
         public static void WriteLines(string path, IEnumerable<string> lines)
         {
-            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
             using StreamWriter sw = new StreamWriter(fs);
             foreach (var line in lines)
             {
                 sw.WriteLine(line);
-                sw.Flush();
             }
         }
 
@@ -900,12 +871,11 @@ namespace TBC.CommonLib
         /// <param name="lines">文本</param>
         public static void AppendLines(string path, IEnumerable<string> lines)
         {
-            using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
             using StreamWriter sw = new StreamWriter(fs);
             foreach (var line in lines)
             {
                 sw.WriteLine(line);
-                sw.Flush();
             }
         }
         #endregion
