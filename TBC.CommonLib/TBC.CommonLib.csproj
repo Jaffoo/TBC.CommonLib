@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <Company>none</Company>
     <PackageProjectUrl>https://github.com/Jaffoo/TBC.CommonLib</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -24,8 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

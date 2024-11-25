@@ -52,7 +52,7 @@ namespace TBC.CommonLib
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="str">json字符串</param>
-        /// <param name="key">键</param>
+        /// <param name="keys">键</param>
         /// <returns></returns>
         public static T Fetch<T>(this string str, params string[] keys)
         {

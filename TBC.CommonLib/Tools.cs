@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Web;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +9,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
-using Newtonsoft.Json.Linq;
 
 namespace TBC.CommonLib
 {
@@ -252,6 +250,17 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// 获取当前周一的时间
+        /// </summary>
+        /// <param name="date">日期</param>
+        /// <returns></returns>
+        public static DateTime Monday()
+        {
+            int daysToSubtract = ((int)DateTime.Now.DayOfWeek - 1 + 7) % 7; // 计算需要减去的天数以获取星期一
+            return DateTime.Now.Date.AddDays(-daysToSubtract); // 返回星期一的日期
+        }
+
+        /// <summary>
         /// 获取周一的时间
         /// </summary>
         /// <param name="date">日期</param>
@@ -260,6 +269,18 @@ namespace TBC.CommonLib
         {
             int daysToSubtract = ((int)date.DayOfWeek - 1 + 7) % 7; // 计算需要减去的天数以获取星期一
             return date.Date.AddDays(-daysToSubtract); // 返回星期一的日期
+        }
+
+        /// <summary>
+        /// 获取当月第一天
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime FirstDay()
+        {
+            int year = DateTime.Now.Year;
+            int month = DateTime.Now.Month;
+            return new DateTime(year, month, 1);
         }
 
         /// <summary>
@@ -272,6 +293,19 @@ namespace TBC.CommonLib
             int year = date.Year;
             int month = date.Month;
             return new DateTime(year, month, 1);
+        }
+
+        /// <summary>
+        /// 获取当月月末最后一天
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime LastDay()
+        {
+            int year = DateTime.Now.Year;
+            int month = DateTime.Now.Month;
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+            return new DateTime(year, month, daysInMonth);
         }
 
         /// <summary>
@@ -288,12 +322,30 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// 获取当前时间所在周的数组
+        /// </summary>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> Week(string order = "asc")
+        {
+            var date = DateTime.Now;
+            List<DateTime> weekDates = new List<DateTime>();
+            DateTime startDate = date.Date.AddDays(-(int)date.DayOfWeek);
+            for (int i = 0; i < 7; i++)
+            {
+                weekDates.Add(startDate.AddDays(i));
+            }
+            if (order.ToLower() == "desc") weekDates.Reverse();
+            return weekDates;
+        }
+
+        /// <summary>
         /// 获取某时间所在周的数组
         /// </summary>
         /// <param name="date"></param>
         /// <param name="order">排序方式</param>
         /// <returns></returns>
-        public static List<DateTime> ThisWeek(DateTime date, string order = "asc")
+        public static List<DateTime> Week(DateTime date, string order = "asc")
         {
             List<DateTime> weekDates = new List<DateTime>();
             DateTime startDate = date.Date.AddDays(-(int)date.DayOfWeek);
@@ -322,12 +374,30 @@ namespace TBC.CommonLib
         }
 
         /// <summary>
+        /// 获取当月月数组
+        /// </summary>
+        /// <param name="order">排序方式</param>
+        /// <returns></returns>
+        public static List<DateTime> Month(string order = "asc")
+        {
+            var date = DateTime.Now;
+            List<DateTime> monthDates = new List<DateTime>();
+            var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
+            for (int i = 1; i <= daysInMonth; i++)
+            {
+                monthDates.Add(new DateTime(date.Year, date.Month, i)); // 将本月的日期加入列表
+            }
+            if (order.ToLower() == "desc") monthDates.Reverse();
+            return monthDates;
+        }
+
+        /// <summary>
         /// 获取某月数组
         /// </summary>
         /// <param name="date">时间</param>
         /// <param name="order">排序方式</param>
         /// <returns></returns>
-        public static List<DateTime> ThisMonth(DateTime date, string order = "asc")
+        public static List<DateTime> Month(DateTime date, string order = "asc")
         {
             List<DateTime> monthDates = new List<DateTime>();
             var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
@@ -471,7 +541,6 @@ namespace TBC.CommonLib
         #endregion
 
         #region 网络请求
-
         /// <summary>
         /// get请求
         /// </summary>
@@ -743,88 +812,7 @@ namespace TBC.CommonLib
         }
         #endregion
 
-        #region 文件夹操作
-
-        /// <summary>
-        /// 复制文件夹
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="toPath"></param>
-        /// <param name="ignoreDir"></param>
-        /// <param name="ignoreFile"></param>
-        public static void DirCopyTo(string source, string toPath, List<string>? ignoreDir = null, List<string>? ignoreFile = null)
-        {
-            try
-            {
-                if (!Directory.Exists(source)) throw new Exception("要移动的目录不存在！");
-                if (Directory.Exists(toPath)) throw new Exception("目标目录已存在！");
-                Directory.CreateDirectory(toPath);
-                var sourceInfo = new DirectoryInfo(source);
-                CopyAll(sourceInfo, toPath, ignoreDir, ignoreFile);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// 复制文件夹
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="toPath"></param>
-        /// <param name="ignoreDir"></param>
-        /// <param name="ignoreFile"></param>
-        public static void DirCopyTo(this DirectoryInfo source, string toPath, List<string>? ignoreDir = null, List<string>? ignoreFile = null)
-        {
-            try
-            {
-                if (Directory.Exists(toPath)) throw new Exception("目标目录已存在！");
-                Directory.CreateDirectory(toPath);
-                //递归复制文件
-                CopyAll(source, toPath, ignoreDir, ignoreFile);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// 递归复制文件
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="toPath"></param>
-        /// <param name="ignoreList"></param>
-        private static void CopyAll(DirectoryInfo source, string toPath, List<string>? ignoreDir = null, List<string>? ignoreFile = null)
-        {
-            //处理文件夹
-            var dirs = source.GetDirectories();
-            if (dirs != null)
-                foreach (var dir in dirs)
-                {
-                    if (ignoreDir != null && ignoreDir.Contains(dir.Name)) continue;
-                    var copyDir = Path.Combine(toPath, dir.Name);
-                    Directory.CreateDirectory(copyDir);
-                    var childDir = dir.GetDirectories();
-                    var childFile = dir.GetFiles();
-                    if ((childDir != null && childDir.Length > 0) || (childFile != null && childFile.Length > 0))
-                        CopyAll(dir, copyDir, ignoreDir, ignoreFile);
-                }
-
-            //处理文件
-            var files = source.GetFiles();
-            if (files != null)
-                foreach (var file in files)
-                {
-                    if (ignoreFile != null && ignoreFile.Contains(file.Name)) continue;
-                    var copyFile = Path.Combine(toPath, file.Name);
-                    File.Copy(file.FullName, copyFile);
-                }
-        }
-        #endregion
-
-        #region 文件操作
+        #region 文本文件操作
         /// <summary>
         /// 写入内容
         /// </summary>
@@ -877,72 +865,6 @@ namespace TBC.CommonLib
             {
                 sw.WriteLine(line);
             }
-        }
-        #endregion
-
-        #region 控制台输入
-        /// <summary>
-        /// 控制台输入一个字符
-        /// </summary>
-        /// <param name="mustInput"></param>
-        /// <returns></returns>
-        public static string ConsoleRead(bool mustInput = true)
-        {
-            StringBuilder characters = new StringBuilder();
-            int input;
-            do
-            {
-                input = Console.Read();
-                if (input != -1) characters.Append((char)input);
-            }
-            while (mustInput && input == -1);
-
-            return characters.ToString();
-        }
-
-        /// <summary>
-        /// 控制台输入字符串
-        /// </summary>
-        /// <param name="mustInput">是否必须输入</param>
-        /// <param name="msg">为输入提示文字</param>
-        /// <param name="msgLineFeed">提示文字是否换行输出</param>
-        /// <returns></returns>
-        public static string ConsoleReadLine(bool mustInput, string msg, bool msgLineFeed)
-        {
-            string input;
-            do
-            {
-                input = Console.ReadLine();
-                if (mustInput && input.IsNullOrWhiteSpace() && !msg.IsNullOrWhiteSpace())
-                    if (msgLineFeed) Console.WriteLine(msg);
-                    else Console.Write(msg);
-            } while (mustInput && string.IsNullOrWhiteSpace(input));
-            return input;
-        }
-
-        /// <summary>
-        /// 控制台输入字符串
-        /// </summary>
-        /// <param name="msg">为输入提示文字</param>
-        /// <param name="msgLineFeed">提示文字是否换行输出</param>
-        /// <returns></returns>
-        public static string ConsoleReadLine(string msg = "", bool msgLineFeed = false)
-        {
-            return ConsoleReadLine(true, msg, msgLineFeed);
-        }
-
-        /// <summary>
-        /// 控制台退出
-        /// </summary>
-        /// <param name="anyKey">任意键退出</param>
-        /// <param name="tips">提示内容</param>
-        /// <returns></returns>
-        public static void ConsoleExit(string tips = "按任意键退出")
-        {
-            if (!tips.IsNullOrWhiteSpace()) Console.Write(tips);
-            Console.ReadKey(); // 等待用户按下任意键
-            // 退出程序
-            Environment.Exit(0);
         }
         #endregion
     }
