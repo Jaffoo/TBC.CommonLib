@@ -78,7 +78,14 @@ namespace TBC.CommonLib
 
                 results.Add(token.ToString());
             }
-            return (T)Convert.ChangeType(string.Concat(results), typeof(T));
+            try
+            {
+                return (T)Convert.ChangeType(string.Concat(results), typeof(T));
+            }
+            catch
+            {
+                return JsonConvert.DeserializeObject<T>(string.Concat(results)) ?? throw new JsonSerializationException();
+            }
         }
 
         /// <summary>

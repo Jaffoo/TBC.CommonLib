@@ -1,11 +1,14 @@
-﻿namespace TBC.CommonLib.Test
+﻿using Newtonsoft.Json.Linq;
+
+namespace TBC.CommonLib.Test
 {
     internal class Program
     {
-        private static AutoResetEvent _resetEvent = new(false);
         static void Main()
         {
-            _resetEvent.WaitOne();
+            var content = File.ReadAllText("C:\\Users\\gaffo\\Desktop\\test.json");
+            var result = content.Fetch("data");
+            var result1 = content.Fetch<JArray>("data");
         }
     }
 }
